@@ -1,0 +1,38 @@
+extends layout
+
+block content
+    div(class='col-lg-6')
+        div(class='panel panel-default')
+            div(class='panel-heading') #{property.statusInfo}
+            div(class='panel-body')
+                div(class='list-group')
+                    li(class='list-group-item', href='#')
+                        i(class='fa fa-gears fa-fw')
+                        |  Status
+                        span(class='pull-right text-muted small')
+                            em(class='log-tl-em-status')
+                    li(class='list-group-item', href='#')
+                        i(class='fa fa-chain fa-fw')
+                        |  Graylog Connected
+                        span(class='pull-right text-muted small')
+                            em(class='log-tl-em-connected')
+                    li(class='list-group-item', href='#')
+                        i(class='fa fa-info fa-fw')
+                        |  Server Version
+                        span(class='pull-right text-muted small')
+                            em(class='log-tl-em-version')
+    div(class='col-lg-6')
+        div(class='panel panel-default')
+            div(class='panel-heading') #{property.resourceStatus.title}
+            div(class='panel-body')
+                label #{property.resourceStatus.memUsage}
+                div(class='log-tl-status-mem progress')
+                    div(class='progress-bar progress-bar-info', role='progressbar')
+                label #{property.resourceStatus.poolUsage}
+                div(class='log-tl-status-pool progress')
+                    div(class='progress-bar progress-bar-success', role='progressbar')
+                label #{property.resourceStatus.queueUsage}
+                div(class='log-tl-status-queue progress')
+                    div(class='progress-bar progress-bar-warning', role='progressbar')
+    script
+        include ../assets/js/log.web.status.js

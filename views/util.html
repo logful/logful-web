@@ -1,0 +1,189 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link rel="icon" href="favicon.ico"><link rel="shortcut icon" href="favicon.ico"><link rel="stylesheet" href="/static/bootstrap/dist/css/bootstrap.min.css"><link rel="stylesheet" href="/static/metisMenu/dist/metisMenu.min.css"><link rel="stylesheet" href="/static/startbootstrap-sb-admin-2/dist/css/timeline.css"><link rel="stylesheet" href="/static/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"><link rel="stylesheet" href="/static/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css"><link rel="stylesheet" href="/static/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"><link rel="stylesheet" href="/static/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"><link rel="stylesheet" href="/static/datatables-responsive/css/dataTables.responsive.css"><link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/static/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css"><link rel="stylesheet" href="/css/style.css"><script type="text/javascript" src="/static/jquery/dist/jquery.min.js"></script><script type="text/javascript" src="/static/bootstrap/dist/js/bootstrap.min.js"></script><script type="text/javascript" src="/static/bootstrap-progressbar/bootstrap-progressbar.min.js"></script><script type="text/javascript" src="/static/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script><script type="text/javascript" src="/static/bootstrap-validator/dist/validator.min.js"></script></head><body><div id="wrapper"><!-- Navigation--><nav role="navigation" style="margin-bottom: 0" class="navbar navbar-default navbar-fixed-top"><div class="navbar-header"><button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/index.html" class="navbar-brand"></a></div><ul class="nav navbar-top-links navbar-right"><li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><i class="fa fa-caret-down"></i></a><ul class="dropdown-menu dropdown-user"><li><a href="/logout.html"><i class="fa fa-sign-out fa-fw"></i> </a></li></ul></li></ul><div role="navigation" class="navbar-default sidebar"><div class="sidebar-nav navbar-collapse"><ul id="side-menu" class="nav"><li><a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> </a></li><li><a href="/search.html"><i class="fa fa-user fa-fw"></i> </a></li><li><a href="/util.html"><i class="fa fa-file fa-fw"></i> </a></li><li><a href="/control.html"><i class="fa fa-gear fa-fw"></i> </a></li></ul></div></div></nav><!-- Content--><div id="page-wrapper"><div class="row"><div class="col-lg-12"><h1 class="page-header"></h1></div></div><div class="row"><div class="col-lg-6"><div class="panel panel-default"><div class="panel-heading">获取日志列表</div><div class="panel-body"><form role="form" data-delay="300" class="log-tl-form-fetch"><!-- platform--><div class="form-group"><label>Platform</label><select name="platform" class="form-control"><option>Android</option><option>iOS</option></select></div><!-- appId--><div class="form-group"><label>Application ID</label><input name="appId" required class="form-control"></div><!-- uid--><div class="form-group"><label>UID</label><input name="uid" required class="form-control"></div><!-- date--><div class="form-group"><label>Date</label><div id="datepicker" class="input-group date"><input name="date" type="text" required class="form-control"><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><button type="button" class="log-tl-btn-fetch btn btn-primary">获取</button></form></div></div></div><div class="col-lg-6"><div class="panel panel-default"><div class="panel-heading">解密日志文件</div><div class="panel-body"><form role="form" data-delay="300" class="log-tl-form-decrypt"><!-- appId--><div class="form-group"><label>Application ID</label><input name="d-appId" required class="form-control"></div><!-- logFile--><div class="form-group"><label>Log File</label><input name="d-logFile" type="file"></div><button type="button" class="log-tl-btn-decrypt btn btn-primary">解密</button></form></div></div><div class="panel panel-default"><div class="panel-heading">清理缓存文件</div><div class="panel-body"><div class="progress progress-striped active"><div role="progressbar" data-transitiongoal="100" class="progress-bar progress-bar-success"></div></div><button type="button" class="log-tl-btn-clear btn btn-primary">清理</button><span class="pull-right text-muted small"><em class="log-tl-em-clear-result"></em></span></div></div></div><!-- log file list dialog--><div id="log-tl-dlg-log-list" class="modal fade"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">日志文件列表</h4></div><div class="modal-body"><div class="dataTable_wrapper"><table id="log-tl-table-log-file-list" class="table table-striped table-bordered table-hover"><thead><tr><th>#</th><th>Filename</th><th>Size</th><th>Level</th><th>Download</th></tr></thead><tbody class="log-tl-tbd-log-list"></tbody></table></div></div><div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-default">关闭</button></div></div></div></div><!-- log file decrypt dialog--><div id="log-tl-dlg-log-decrypt" class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">解密结果</h4></div><div class="modal-body"><div class="log-tl-pgb progress progress-striped active"><div role="progressbar" data-transitiongoal="100" class="progress-bar progress-bar-success"></div></div><a href="#" class="log-tl-a-download btn btn-default">Download</a><span class="log-tl-em-decrypt-failed text-muted small"><em style="color: #af0000">failed</em></span></div><div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-default">关闭</button></div></div></div></div><script>/**
+ * Created by keith on 15/9/14.
+ */
+
+var table, fetchForm, decryptForm;
+var fetchFormValid = false;
+var decryptFormValid = false;
+
+$(document).ready(function () {
+    table = $('#log-tl-table-log-file-list').DataTable({
+        responsive: true
+    });
+
+    fetchForm = $(".log-tl-form-fetch");
+    fetchForm.validator();
+    fetchForm.on('validated.bs.validator', function () {
+        var validator = fetchForm.data('bs.validator');
+        fetchFormValid = !validator.hasErrors();
+    });
+
+    decryptForm = $(".log-tl-form-decrypt");
+    decryptForm.validator();
+    decryptForm.on('validated.bs.validator', function () {
+        var validator = decryptForm.data('bs.validator');
+        decryptFormValid = !validator.hasErrors();
+    });
+});
+
+$(".log-tl-btn-fetch").click(function () {
+    if (fetchForm) {
+        fetchForm.validator('validate');
+        if (fetchFormValid) {
+            if (table) {
+                table.clear();
+            }
+
+            $("#log-tl-dlg-log-list").modal("show");
+
+            var values = {};
+            $.each(fetchForm.serializeArray(), function (item, field) {
+                values[field.name] = field.value;
+            });
+
+            $.ajax({
+                url: LogWebConfig.url.fetchList,
+                data: values,
+                timeout: 500,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var list = [];
+                    $.each(data, function () {
+                        list.push(this);
+                    });
+
+                    list.sort(function (l, r) {
+                        return l.level - r.level;
+                    });
+
+                    var index = 1;
+                    list.forEach(function (entry) {
+                        if (table) {
+                            var url = LogWebConfig.url.fetch + "/" + entry.uri;
+                            table.row.add([index + '',
+                                entry.filename + '',
+                                filesize(entry.size) + '',
+                                spanForLevel(entry.level),
+                                "<a href='" + url + "' >" + "<i class='fa fa-download fa-fw'></i>" + " 下载文件</a>"
+                            ]);
+                        }
+                        index++;
+                    });
+
+                    if (table) {
+                        table.draw();
+                    }
+                }
+            });
+        }
+    }
+});
+
+$(".log-tl-btn-decrypt").click(function () {
+    if (decryptForm) {
+        decryptForm.validator('validate');
+        if (decryptFormValid) {
+            $("#log-tl-dlg-log-decrypt").modal("show");
+
+            var progress = $('.log-tl-pgb .progress-bar');
+            progress.attr('data-transitiongoal', 100);
+            progress.progressbar();
+
+            var button = $('.log-tl-a-download');
+            button.attr("href", "#");
+            button.hide();
+
+            var failedView = $('.log-tl-em-decrypt-failed');
+            failedView.hide();
+
+            var formData = new FormData();
+            formData.append('appId', $('input[name="d-appId"]').val());
+            formData.append('logFile', $('input[name="d-logFile"]')[0].files[0]);
+
+            $.ajax({
+                url: LogWebConfig.url.decrypt,
+                type: "POST",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    var url = LogWebConfig.url.download + "/" + data.uri;
+                    button.attr("href", url);
+
+                    setTimeout(function () {
+                        button.show();
+                    }, 300);
+                },
+                error: function () {
+                    setTimeout(function () {
+                        failedView.show();
+                    }, 300);
+                }
+            });
+        }
+    }
+});
+
+$(".log-tl-btn-clear").click(function () {
+    var progress = $('.progress .progress-bar');
+    progress.attr('data-transitiongoal', 100);
+    progress.progressbar();
+
+    var em = $(".log-tl-em-clear-result");
+    em.empty();
+
+    $.ajax({
+        url: LogWebConfig.url.clear,
+        timeout: 500,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            var valueString = data.result ? "successful" : "failed";
+            setTimeout(function () {
+                em.html(valueString);
+                progress.attr('data-transitiongoal', 0).progressbar();
+            }, 1000);
+        },
+        error: function () {
+            setTimeout(function () {
+                em.html("failed");
+                progress.attr('data-transitiongoal', 0).progressbar();
+            }, 1000);
+        }
+    });
+});
+
+function formatDate(timestamp) {
+    return moment(timestamp).format("YYYY/MM/DD HH:mm:ss");
+}
+
+function spanForLevel(level) {
+    var labelClass = 'label-default';
+    switch (level) {
+        case 1:
+            labelClass = 'label-default';
+            break;
+        case 2:
+            labelClass = 'label-primary';
+            break;
+        case 3:
+            labelClass = 'label-success';
+            break;
+        case 4:
+            labelClass = 'label-info';
+            break;
+        case 5:
+            labelClass = 'label-warning';
+            break;
+        case 6:
+            labelClass = 'label-danger';
+            break;
+        case 7:
+            labelClass = 'label-danger';
+            break;
+    }
+    return "<span class='label " + labelClass + "'>" + levelString(level) + "</span>";
+}
+</script></div></div></div><script type="text/javascript" src="/static/datatables/media/js/jquery.dataTables.min.js"></script><script type="text/javascript" src="/static/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script><script type="text/javascript" src="/static/metisMenu/dist/metisMenu.min.js"></script><script type="text/javascript" src="/static/moment/min/moment.min.js"></script><script type="text/javascript" src="/static/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script><script type="text/javascript" src="/js/datepicker.js"></script><script type="text/javascript" src="/js/filesize.min.js"></script><script type="text/javascript" src="/static/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/js/log.web.tool.js"></script></body></html>

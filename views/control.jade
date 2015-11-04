@@ -1,0 +1,94 @@
+extends layout
+
+block content
+    div(class='col-lg-12')
+        div(class='panel panel-default')
+            div(class='panel-heading') 详细配置
+                div(class='btn-group pull-right')
+                    button(type='button', class='btn btn-default btn-xs dropdown-toggle', data-toggle='dropdown')
+                        i(class='fa fa-chevron-down')
+                    ul(class='dropdown-menu slidedown')
+                        li
+                            a(class='lf-detail-control-add', style='cursor: pointer;')
+                                i(class='fa fa-plus fa-fw')
+                                | 新增
+                            a(class='lf-detail-control-clear', style='cursor: pointer;')
+                                i(class='fa fa-trash-o fa-fw')
+                                | 全部删除
+            div(class='panel-body')
+                div(class='row')
+                    div(id='lf-control-list-col', class='col-lg-12')
+                        div(class='table-responsive')
+                            table(class='table table-bordered table-hover')
+                                thead
+                                    tr
+                                        th #
+                                        th 名称
+                                        th 时间
+                                        th 操作
+                                tbody(class='lf-control-detail-tbody')
+                    div(id='lf-edit-control-param-col', class='col-lg-6', style='display: none;')
+                        form(role='form')
+                            fieldset
+                                legend 新增参数配置
+                                div(class='input-group', style='margin-bottom: 15px;')
+                                    span(class='input-group-addon') 配置名称
+                                    input(type='text', name='lf-control-name' class='form-control', placeholder='参数配置名称')
+                                div(class='form-group')
+                                    label 目标用户
+                                    div(class='row')
+                                        div(class='col-md-6')
+                                            select(name='lf-control-platform', class='form-control select-picker show-menu-arrow', data-width='100%')
+                                                option(value='1') Android
+                                                option(value='2') iOS
+                                        div(class='col-md-6')
+                                            input(name='lf-control-uid', class='form-control', placeholder='UID')
+                                div(class='form-group')
+                                    div(class='row')
+                                        div(class='col-md-6')
+                                            input(name='lf-control-alias', class='form-control', placeholder='用户别名')
+                                        div(class='col-md-6')
+                                            input(name='lf-control-app-id', class='form-control', placeholder='应用 ID')
+                                div(class='form-group')
+                                    label 是否允许上传
+                                    div(class='pull-right')
+                                        input(name='lf-control-should-upload', type='checkbox', class='lf-control-item-switch pull-right',data-on-text='是', data-off-text='否', data-size='small')
+                                div(class='lf-control-extra-param', style='display: none;')
+                                    div(class='input-group', style='margin-bottom: 15px;')
+                                        div(class='input-group-btn')
+                                            select(name='platform', class='lf-control-item-schedule-type form-control select-picker show-menu-arrow', data-width='100%')
+                                                option(value='1') 定时上传
+                                                option(value='2') 周期上传
+                                        span(class='input-group-addon lf-control-item-with-date-check', style='border-left: 0;border-right: 0;')
+                                            input(type='checkbox', class='lf-control-item-with-date', data-toggle='tooltip' data-placement='top' title='指定具体日期')
+                                        input(name='lf-control-schedule-value', type='text', class='form-control datetime-picker')
+                                        span(class='input-group-addon lf-control-item-unit', id='sizing-addon2', style='display: none;') 秒
+                                        div(class='input-group-btn lf-control-item-button-add')
+                                            button(type='button', class='btn btn-default', data-toggle='tooltip', data-placement='top' title='添加指定时间')
+                                                i(class='fa fa-plus fa-fw')
+                                    div(class='lf-control-schedule-time-list')
+                                        table(class='table table-bordered table-hover')
+                                            thead
+                                                tr
+                                                    th #
+                                                    th 指定时间
+                                                    th 操作
+                                            tbody(class='lf-control-schedule-time-tbody')
+                                        hr
+                                div(class='form-group')
+                                    button(type='button', class='btn btn-default lf-edit-control-param-cancel') 取消
+                                    button(type='button', class='btn btn-primary pull-right lf-edit-control-confirm') 确认
+    div(class='col-lg-6')
+        div(class='panel panel-default')
+            div(class='panel-heading') #{property.levelControl.title}
+            div(class='panel-body')
+                form(class='log-tl-form-control', role='form')
+                    div(class='form-group')
+                        label #{property.levelControl.level}
+                        input(id='log-tl-level-slider', type='text', style='display: none')
+                        span(class='pull-right text-muted small')
+                            em #{property.levelControl.tipsPrefix}&nbsp
+                            em(class='log-tl-control-level-tips')
+                            em #{property.levelControl.tipsSuffix}
+    script
+        include ../assets/js/log.web.control.js

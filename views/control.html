@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link rel="icon" href="favicon.ico"><link rel="shortcut icon" href="favicon.ico"><link rel="stylesheet" href="/static/bootstrap/dist/css/bootstrap.min.css"><link rel="stylesheet" href="/static/metisMenu/dist/metisMenu.min.css"><link rel="stylesheet" href="/static/startbootstrap-sb-admin-2/dist/css/timeline.css"><link rel="stylesheet" href="/static/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"><link rel="stylesheet" href="/static/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css"><link rel="stylesheet" href="/static/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"><link rel="stylesheet" href="/static/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"><link rel="stylesheet" href="/static/datatables-responsive/css/dataTables.responsive.css"><link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/static/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css"><link rel="stylesheet" href="/css/style.css"><script type="text/javascript" src="/static/jquery/dist/jquery.min.js"></script><script type="text/javascript" src="/static/bootstrap/dist/js/bootstrap.min.js"></script><script type="text/javascript" src="/static/bootstrap-progressbar/bootstrap-progressbar.min.js"></script><script type="text/javascript" src="/static/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script><script type="text/javascript" src="/static/bootstrap-validator/dist/validator.min.js"></script></head><body><div id="wrapper"><!-- Navigation--><nav role="navigation" style="margin-bottom: 0" class="navbar navbar-default navbar-fixed-top"><div class="navbar-header"><button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/index.html" class="navbar-brand"></a></div><ul class="nav navbar-top-links navbar-right"><li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><i class="fa fa-caret-down"></i></a><ul class="dropdown-menu dropdown-user"><li><a href="/logout.html"><i class="fa fa-sign-out fa-fw"></i> </a></li></ul></li></ul><div role="navigation" class="navbar-default sidebar"><div class="sidebar-nav navbar-collapse"><ul id="side-menu" class="nav"><li><a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> </a></li><li><a href="/search.html"><i class="fa fa-user fa-fw"></i> </a></li><li><a href="/util.html"><i class="fa fa-file fa-fw"></i> </a></li><li><a href="/control.html"><i class="fa fa-gear fa-fw"></i> </a></li></ul></div></div></nav><!-- Content--><div id="page-wrapper"><div class="row"><div class="col-lg-12"><h1 class="page-header"></h1></div></div><div class="row"><div class="col-lg-6"><div class="panel panel-default"><div class="panel-heading">灰度控制</div><div class="panel-body"><form role="form" class="log-tl-form-control"><div class="form-group"><label>Level</label><input id="log-tl-level-slider" type="text" style="display: none"></div></form></div></div></div><script>/**
+ * Created by keith on 15/10/9.
+ */
+$(window).load(function () {
+    var slider;
+
+    var sliderListener = function () {
+        var value = slider.getValue();
+        $.ajax({
+            url: LogWebConfig.url.level,
+            type: "POST",
+            data: {'level': value},
+            success: function (data) {
+
+            }
+        });
+    };
+
+    $.ajax({
+        url: LogWebConfig.url.level,
+        timeout: 500,
+        type: "GET",
+        dataType: "json",
+        error: function () {
+            slider = $("#log-tl-level-slider").slider({
+                step: 1,
+                min: 0,
+                max: 100,
+                value: 0,
+                formatter: function (value) {
+                    return value + '%';
+                }
+            }).on('slideStop', sliderListener).data('slider');
+        },
+        success: function (data) {
+            slider = $("#log-tl-level-slider").slider({
+                step: 1,
+                min: 0,
+                max: 100,
+                value: data.level,
+                formatter: function (value) {
+                    return value + '%';
+                }
+            }).on('slideStop', sliderListener).data('slider');
+        }
+    });
+});
+</script></div></div></div><script type="text/javascript" src="/static/datatables/media/js/jquery.dataTables.min.js"></script><script type="text/javascript" src="/static/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script><script type="text/javascript" src="/static/metisMenu/dist/metisMenu.min.js"></script><script type="text/javascript" src="/static/moment/min/moment.min.js"></script><script type="text/javascript" src="/static/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script><script type="text/javascript" src="/js/datepicker.js"></script><script type="text/javascript" src="/js/filesize.min.js"></script><script type="text/javascript" src="/static/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/js/log.web.tool.js"></script></body></html>
