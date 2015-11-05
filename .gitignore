@@ -31,3 +31,5 @@ bower_components
 .idea/
 
 *.iml
+
+views/*.html
