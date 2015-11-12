@@ -5,7 +5,7 @@ $(document).ready(function () {
     var sliderStopListener = function () {
         var value = slider.getValue();
         $.ajax({
-            url: LogWebConfig.url.level,
+            url: LogWebConfig.url.control.level,
             type: "POST",
             timeout: timeout,
             data: {'level': value},
@@ -20,7 +20,7 @@ $(document).ready(function () {
     };
 
     $.ajax({
-        url: LogWebConfig.url.level,
+        url: LogWebConfig.url.control.level,
         timeout: timeout,
         type: "GET",
         dataType: "json",
@@ -207,7 +207,7 @@ $(document).ready(function () {
 
 var listAllControlProfiles = function () {
     $.ajax({
-        url: LogWebConfig.url.control,
+        url: LogWebConfig.url.control.profile.list,
         type: "GET",
         timeout: timeout,
         dataType: "json",
@@ -224,7 +224,7 @@ var listAllControlProfiles = function () {
 
 var deleteControlProfile = function (id) {
     $.ajax({
-        url: LogWebConfig.url.control + "/" + id,
+        url: LogWebConfig.url.control.profile.view + "/" + id,
         type: "DELETE",
         timeout: timeout,
         success: function () {
@@ -266,7 +266,7 @@ var uploadRawData = function (rawData) {
     console.log(rawData);
 
     $.ajax({
-        url: LogWebConfig.url.control,
+        url: LogWebConfig.url.control.profile.edit,
         type: "POST",
         timeout: timeout,
         data: JSON.stringify(rawData),

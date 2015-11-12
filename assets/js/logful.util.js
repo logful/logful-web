@@ -32,7 +32,7 @@ var spanForLevel = function (level) {
 
 var operationCol = function (entry) {
     var uri = '?fid=' + entry.fid + '&filename=' + entry.filename;
-    var downUrl = LogWebConfig.url.fetch + uri;
+    var downUrl = LogWebConfig.url.util.log.download + uri;
     var viewUrl = 'log/viewer.html' + uri;
     return "<a href='" + downUrl + "' >" + "<i class='fa fa-download fa-fw'></i>" + " Down</a>"
         + "  <a href='" + viewUrl + "' target='_blank' >" + "<i class='fa fa-eye fa-fw'></i>" + " View</a>";
@@ -66,7 +66,7 @@ $(document).ready(function () {
     input.bind('input', function () {
         var value = input.val();
         if (value.match("[a-fA-F0-9]{32}")) {
-            link.attr('href', LogWebConfig.url.attachment + '/' + value);
+            link.attr('href', LogWebConfig.url.util.attachment.download + '/' + value);
             link.removeClass('disabled');
         }
         else {
@@ -101,7 +101,7 @@ $(".log-tl-btn-fetch").click(function () {
                     xhrObj.setRequestHeader("Content-Type", "application/json");
                     xhrObj.setRequestHeader("Accept", "application/json");
                 },
-                url: LogWebConfig.url.fetchList,
+                url: LogWebConfig.url.util.log.list,
                 data: JSON.stringify(values),
                 timeout: timeout,
                 type: "POST",
@@ -160,7 +160,7 @@ $(".log-tl-btn-decrypt").click(function () {
             formData.append('logFile', $('input[name="d-logFile"]')[0].files[0]);
 
             $.ajax({
-                url: LogWebConfig.url.decrypt,
+                url: LogWebConfig.url.util.decrypt.upload,
                 type: "POST",
                 timeout: timeout,
                 data: formData,
@@ -168,7 +168,7 @@ $(".log-tl-btn-decrypt").click(function () {
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    var url = LogWebConfig.url.download + "/" + data.uri;
+                    var url = LogWebConfig.url.util.decrypt.download + "/" + data.uri;
                     button.attr("href", url);
 
                     setTimeout(function () {
@@ -194,7 +194,7 @@ $(".log-tl-btn-clear").click(function () {
     em.empty();
 
     $.ajax({
-        url: LogWebConfig.url.clear,
+        url: LogWebConfig.url.util.clear,
         timeout: timeout,
         type: "GET",
         dataType: "json",

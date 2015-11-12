@@ -24,7 +24,7 @@ $(".log-tl-btn-search").click(function () {
     tbody.empty();
 
     $.ajax({
-        url: LogWebConfig.url.uid,
+        url: LogWebConfig.url.uid.list,
         data: values,
         timeout: timeout,
         type: "GET",
@@ -83,7 +83,7 @@ $(".log-tl-btn-query").click(function () {
                 }
             });
 
-            var url = LogWebConfig.url.uid + '/' + values.platform + '/' + values.uid;
+            var url = LogWebConfig.url.uid.view + '/' + values.platform + '/' + values.uid;
             $.ajax({
                 url: url,
                 type: "GET",

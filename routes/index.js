@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/index.html', function (req, res, next) {
     if (req.session.user) {
-        res.render('status', {
+        res.render('dashboard', {
             common: res.__('common'),
             property: res.__('dashboardPage')
         });
@@ -31,9 +31,9 @@ router.get('/index.html', function (req, res, next) {
     }
 });
 
-router.get('/search.html', function (req, res, next) {
+router.get('/uid.html', function (req, res, next) {
     if (req.session.user) {
-        res.render('search', {
+        res.render('uid', {
             common: res.__('common'),
             property: res.__('uidToolPage')
         });

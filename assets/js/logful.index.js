@@ -1,6 +1,6 @@
 $(window).load(function () {
     $.ajax({
-        url: LogWebConfig.url.status,
+        url: LogWebConfig.url.dashboard.status,
         timeout: timeout,
         type: "GET",
         dataType: "json",
@@ -31,7 +31,7 @@ $(window).load(function () {
     });
 
     $.ajax({
-        url: LogWebConfig.url.resource,
+        url: LogWebConfig.url.dashboard.resource,
         timeout: timeout,
         type: "GET",
         dataType: "json",

@@ -22,7 +22,6 @@
     "node-uuid": "~1.4.3",
     "request": "~2.65.0",
     "serve-favicon": "~2.3.0",
-    "string": "~3.3.1",
-    "weed-fs": "https://github.com/cruzrr/node-weedfs.git"
+    "string": "~3.3.1"
   }
 }
