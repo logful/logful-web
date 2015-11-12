@@ -8,7 +8,7 @@ var http = require('http');
 var lineReader = require('line-reader');
 var config = require('../config/config');
 
-var logDirPath = config.dataPath + '/decrypted';
+var weedFS = require('../utils/weedFS');
 
 router.get('/', function (req, res, next) {
     if (req.session.user) {
@@ -71,55 +71,68 @@ router.get('/log/viewer.html', function (req, res) {
     if (!req.session.user) {
         res.redirect('/login.html');
     }
-
-    var platform = req.query.platform;
-    var appId = req.query.appId;
-    var uid = req.query.uid;
     var filename = req.query.filename;
-    if (platform && appId && uid && filename) {
-        var filePath = logDirPath + "/" + platform + "/" + appId + "/" + uid + "/" + filename;
-        if (!fs.existsSync(filePath)) {
-            res.status(400).send({error: 'Lof file not found!'});
-        }
+    var fid = req.query.fid;
 
-        var rows = [];
-        lineReader.eachLine(filePath, function (line, last) {
-            var parts = line.split('\u1699\u168f\u16e5');
-            var record;
-            if (parts.length == 3) {
-                record = {
-                    time: parts[0],
-                    tag: parts[1],
-                    msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s
-                };
-                rows.push(record);
-            }
-            else if (parts.length == 4) {
-                record = {
-                    time: parts[0],
-                    tag: parts[1],
-                    msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s,
-                    att: '/attachment/' + parts[3] + '.jpg'
-                };
-                rows.push(record);
-            }
-            if (last) {
-                var meta = {
-                    filename: filename,
-                    line: rows.length
-                };
-                res.render('viewer.jade', {
-                    common: res.__('logFileViewer'),
-                    lines: rows,
-                    meta: meta
+    if (!fid || !filename) {
+        res.status(400).send({error: 'Request param error!'});
+    }
+
+    weedFS.read(fid, function (error, filePath) {
+        if (error) {
+            res.status(500).send({error: 'Read log file error!'});
+        }
+        else {
+            if (filePath) {
+                if (!fs.existsSync(filePath)) {
+                    res.status(404).send({error: 'File not found!'});
+                }
+                var rows = [];
+                lineReader.eachLine(filePath, function (line, last) {
+                    var parts = line.split('\u1699\u168f\u16e5');
+                    var record;
+                    if (parts.length == 3) {
+                        record = {
+                            time: parts[0],
+                            tag: parts[1],
+                            msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s
+                        };
+                        rows.push(record);
+                    }
+                    else if (parts.length == 4) {
+                        record = {
+                            time: parts[0],
+                            tag: parts[1],
+                            msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s,
+                            att: '/attachment/' + parts[3] + '.jpg'
+                        };
+                        rows.push(record);
+                    }
+                    if (last) {
+                        var meta = {
+                            filename: filename,
+                            line: rows.length
+                        };
+                        res.render('viewer.jade', {
+                            common: res.__('logFileViewer'),
+                            lines: rows,
+                            meta: meta
+                        });
+
+                        fs.unlink(filePath, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        });
+                        return false;
+                    }
                 });
-                return false;
             }
-        });
-    }
-    else {
-        res.status(500).send({error: 'Request param error!'});
-    }
+            else {
+                res.status(404).send({error: 'File not found!'});
+            }
+        }
+    });
 });
 
 router.get('/login.html', function (req, res, next) {
@@ -134,9 +147,6 @@ router.post('/login.html', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var remember = req.body.remember;
-
-    console.log(config);
-
     if (username && password) {
         var hashPassword = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
         if (username === config.security.username && hashPassword === config.security.password) {

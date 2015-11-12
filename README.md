@@ -1,4 +1,4 @@
-# Logful
+# logful-web
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/logful/logful-web/blob/master/LICENSE)
 

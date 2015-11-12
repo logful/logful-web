@@ -7,6 +7,7 @@ $(document).ready(function () {
         $.ajax({
             url: LogWebConfig.url.level,
             type: "POST",
+            timeout: timeout,
             data: {'level': value},
             success: function (data) {
 
@@ -20,7 +21,7 @@ $(document).ready(function () {
 
     $.ajax({
         url: LogWebConfig.url.level,
-        timeout: 500,
+        timeout: timeout,
         type: "GET",
         dataType: "json",
         error: function () {
@@ -208,6 +209,7 @@ var listAllControlProfiles = function () {
     $.ajax({
         url: LogWebConfig.url.control,
         type: "GET",
+        timeout: timeout,
         dataType: "json",
         success: function (data) {
             var tbody = $(".lf-control-detail-tbody");
@@ -224,6 +226,7 @@ var deleteControlProfile = function (id) {
     $.ajax({
         url: LogWebConfig.url.control + "/" + id,
         type: "DELETE",
+        timeout: timeout,
         success: function () {
             // TODO
         }
@@ -265,6 +268,7 @@ var uploadRawData = function (rawData) {
     $.ajax({
         url: LogWebConfig.url.control,
         type: "POST",
+        timeout: timeout,
         data: JSON.stringify(rawData),
         dataType: "json",
         contentType: "application/json",

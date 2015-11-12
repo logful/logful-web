@@ -1,7 +1,7 @@
 $(window).load(function () {
     $.ajax({
         url: LogWebConfig.url.status,
-        timeout: 500,
+        timeout: timeout,
         type: "GET",
         dataType: "json",
         error: function () {
@@ -32,7 +32,7 @@ $(window).load(function () {
 
     $.ajax({
         url: LogWebConfig.url.resource,
-        timeout: 500,
+        timeout: timeout,
         type: "GET",
         dataType: "json",
         success: function (data) {

@@ -30,7 +30,8 @@ var spanForLevel = function (level) {
     return "<span class='label " + labelClass + "'>" + levelString(level) + "</span>";
 };
 
-var operationCol = function (uri) {
+var operationCol = function (entry) {
+    var uri = '?fid=' + entry.fid + '&filename=' + entry.filename;
     var downUrl = LogWebConfig.url.fetch + uri;
     var viewUrl = 'log/viewer.html' + uri;
     return "<a href='" + downUrl + "' >" + "<i class='fa fa-download fa-fw'></i>" + " Down</a>"
@@ -87,14 +88,23 @@ $(".log-tl-btn-fetch").click(function () {
 
             var values = {};
             $.each(fetchForm.serializeArray(), function (item, field) {
-                values[field.name] = field.value;
+                if (field.name == "date") {
+                    values[field.name] = field.value.replace(/\//g, "");
+                }
+                else {
+                    values[field.name] = field.value;
+                }
             });
 
             $.ajax({
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Content-Type", "application/json");
+                    xhrObj.setRequestHeader("Accept", "application/json");
+                },
                 url: LogWebConfig.url.fetchList,
-                data: values,
-                timeout: 500,
-                type: "GET",
+                data: JSON.stringify(values),
+                timeout: timeout,
+                type: "POST",
                 dataType: "json",
                 success: function (data) {
                     var list = [];
@@ -113,7 +123,7 @@ $(".log-tl-btn-fetch").click(function () {
                                 entry.filename + '',
                                 filesize(entry.size) + '',
                                 spanForLevel(entry.level),
-                                operationCol(entry.uri)
+                                operationCol(entry)
                             ]);
                         }
                         index++;
@@ -152,6 +162,7 @@ $(".log-tl-btn-decrypt").click(function () {
             $.ajax({
                 url: LogWebConfig.url.decrypt,
                 type: "POST",
+                timeout: timeout,
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -184,7 +195,7 @@ $(".log-tl-btn-clear").click(function () {
 
     $.ajax({
         url: LogWebConfig.url.clear,
-        timeout: 500,
+        timeout: timeout,
         type: "GET",
         dataType: "json",
         success: function (data) {

@@ -26,7 +26,7 @@ $(".log-tl-btn-search").click(function () {
     $.ajax({
         url: LogWebConfig.url.uid,
         data: values,
-        timeout: 500,
+        timeout: timeout,
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -87,6 +87,7 @@ $(".log-tl-btn-query").click(function () {
             $.ajax({
                 url: url,
                 type: "GET",
+                timeout: timeout,
                 dataType: "json",
                 success: function (data) {
                     if (data.platform) {

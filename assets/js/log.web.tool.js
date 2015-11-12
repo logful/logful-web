@@ -1,19 +1,16 @@
-var baseUrl = "http://127.0.0.1:9600";
-
 var LogWebConfig = {
     url: {
-        uid: baseUrl + "/web/uid",
-        status: baseUrl + "/web/status",
-        resource: baseUrl + "/web/resource",
-        fetchList: baseUrl + "/web/log/files",
-        fetch: baseUrl + "/web/log/fetch",
-        attachment: baseUrl + "/web/attachment/download",
-        decrypt: baseUrl + "/web/decrypt",
-        download: baseUrl + "/web/download",
-        clear: baseUrl + "/web/clear",
-        level: baseUrl + "/web/level",
-        error: baseUrl + "/web/errors",
-        control: baseUrl + "/web/control"
+        uid: "/proxy/web/uid",
+        status: "/proxy/web/status",
+        resource: "/proxy/web/resource",
+        fetchList: "/proxy/web/log/files",
+        fetch: "/api/log/file/download",
+        attachment: "/proxy/web/attachment/download",
+        decrypt: "/proxy/web/decrypt",
+        download: "/proxy/web/download",
+        clear: "/proxy/web/clear",
+        level: "/proxy/web/level",
+        control: "/proxy/web/control"
     }
 };
 
@@ -36,3 +33,5 @@ var levelString = function (level) {
     }
     return 'verbose';
 };
+
+var timeout = 50000;

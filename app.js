@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var i18n = require("i18n");
 var flash = require('connect-flash');
+var proxy = require('express-http-proxy');
+
 var config = require('./config/config');
 
 i18n.configure({
@@ -16,6 +18,7 @@ i18n.configure({
 });
 
 var routes = require('./routes/index');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -27,6 +30,14 @@ app.set('view engine', 'jade');
 
 app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
 app.use(logger('dev'));
+
+app.use('/proxy', proxy(config.logfulApi, {
+    decorateRequest: function (req) {
+        // TODO
+        return req;
+    }
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -42,6 +53,7 @@ app.use('/static', express.static(__dirname + '/bower_components'));
 app.use('/attachment', express.static(config.dataPath + '/attachment'));
 
 app.use('/', routes);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -77,4 +89,3 @@ app.use(function (err, req, res, next) {
 module.exports = app;
 
 app.listen(8800);
-//app.listen(26000);
