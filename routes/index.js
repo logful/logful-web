@@ -2,13 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 var String = require('string');
+var uuid = require('node-uuid');
+var path = require("path");
 var fs = require("fs");
 var crypto = require('crypto');
 var http = require('http');
+var request = require('request');
 var lineReader = require('line-reader');
 var config = require('../config/config');
-
-var weedFS = require('../utils/weedFS');
 
 router.get('/', function (req, res, next) {
     if (req.session.user) {
@@ -70,6 +71,7 @@ router.get('/control.html', function (req, res, next) {
 router.get('/log/viewer.html', function (req, res) {
     if (!req.session.user) {
         res.redirect('/login.html');
+        return;
     }
     var filename = req.query.filename;
     var fid = req.query.fid;
@@ -78,60 +80,70 @@ router.get('/log/viewer.html', function (req, res) {
         res.status(400).send({error: 'Request param error!'});
     }
 
-    weedFS.read(fid, function (error, filePath) {
-        if (error) {
-            res.status(500).send({error: 'Read log file error!'});
-        }
-        else {
-            if (filePath) {
-                if (!fs.existsSync(filePath)) {
-                    res.status(404).send({error: 'File not found!'});
-                }
-                var rows = [];
-                lineReader.eachLine(filePath, function (line, last) {
-                    var parts = line.split('\u1699\u168f\u16e5');
-                    var record;
-                    if (parts.length == 3) {
-                        record = {
-                            time: parts[0],
-                            tag: parts[1],
-                            msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s
-                        };
-                        rows.push(record);
-                    }
-                    else if (parts.length == 4) {
-                        record = {
-                            time: parts[0],
-                            tag: parts[1],
-                            msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s,
-                            att: '/attachment/' + parts[3] + '.jpg'
-                        };
-                        rows.push(record);
-                    }
-                    if (last) {
-                        var meta = {
-                            filename: filename,
-                            line: rows.length
-                        };
-                        res.render('viewer.jade', {
-                            common: res.__('logFileViewer'),
-                            lines: rows,
-                            meta: meta
-                        });
+    var resource = config.weedMaster + '/' + fid;
+    if (resource.indexOf('http://') == -1) {
+        resource = 'http://' + resource;
+    }
 
-                        fs.unlink(filePath, function (error) {
-                            if (error) {
-                                console.log(error);
-                            }
-                        });
-                        return false;
+    var filePath = path.join(__dirname, '..', 'temporary/') + uuid.v4();
+    var stream = fs.createWriteStream(filePath);
+    stream.on('error', function (error) {
+        res.status(500).send({error: 'Server error!'});
+        res.end();
+    });
+    stream.on('open', function () {
+        request
+            .get(resource)
+            .on('error', function (error) {
+                res.status(500).send({error: 'Server error!'});
+                res.end();
+            }).pipe(stream);
+    });
+    stream.on('close', function () {
+        if (!fs.existsSync(filePath)) {
+            res.status(404).send({error: 'File not found!'});
+            res.end();
+        }
+        var rows = [];
+        lineReader.eachLine(filePath, function (line, last) {
+            var parts = line.split('\u1699\u168f\u16e5');
+            var record;
+            if (parts.length == 3) {
+                record = {
+                    time: parts[0],
+                    tag: parts[1],
+                    msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s
+                };
+                rows.push(record);
+            }
+            else if (parts.length == 4) {
+                record = {
+                    time: parts[0],
+                    tag: parts[1],
+                    msg: String(parts[2]).replaceAll('\u203c\u204b\u25a9', '\n').s,
+                    attach: '/api/log/attachment/view?id=' + parts[3] + '.jpg'
+                };
+                rows.push(record);
+            }
+            if (last) {
+                var meta = {
+                    filename: filename,
+                    line: rows.length
+                };
+                res.render('viewer.jade', {
+                    common: res.__('logFileViewer'),
+                    lines: rows,
+                    meta: meta
+                });
+
+                fs.unlink(filePath, function (error) {
+                    if (error) {
+                        console.log(error);
                     }
                 });
+                return false;
             }
-            else {
-                res.status(404).send({error: 'File not found!'});
-            }
-        }
+        });
     });
 });
 

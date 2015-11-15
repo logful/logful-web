@@ -8,25 +8,18 @@ $(window).load(function () {
 
         },
         success: function (data) {
-            var status = data.status;
-            var connected = data.graylog_connected;
-            var version = data.version;
+            var text;
 
-            if (status == 0) {
-                $('.log-tl-em-status').html('ok');
-            }
-            else {
-                $('.log-tl-em-status').html('error');
-            }
+            text = data.status == 0 ? "ok" : "error";
+            $('.log-tl-em-status').html(text);
 
-            if (connected == true) {
-                $('.log-tl-em-connected').html('connected');
-            }
-            else {
-                $('.log-tl-em-connected').html('not connected');
-            }
+            text = data.graylog_connectedd ? "yes" : "no";
+            $('.log-tl-em-graylog-connected').html(text);
 
-            $('.log-tl-em-version').html(version);
+            text = data.weed_fs_connected ? "yes" : "no";
+            $('.log-tl-em-weed-fs-connected').html(text);
+
+            $('.log-tl-em-version').html(data.version);
         }
     });
 

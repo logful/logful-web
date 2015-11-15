@@ -14,7 +14,7 @@ var LogWebConfig = {
                 download: "/api/log/file/download"
             },
             attachment: {
-                download: "/proxy/web/util/attachment/download"
+                view: "/proxy/web/util/attachment"
             },
             decrypt: {
                 upload: "/proxy/web/util/decrypt/upload",

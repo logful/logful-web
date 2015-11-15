@@ -6,17 +6,22 @@ block content
             div(class='panel-heading') #{property.statusInfo}
             div(class='panel-body')
                 div(class='list-group')
-                    li(class='list-group-item', href='#')
+                    li(class='list-group-item')
                         i(class='fa fa-gears fa-fw')
                         |  Status
                         span(class='pull-right text-muted small')
                             em(class='log-tl-em-status')
-                    li(class='list-group-item', href='#')
-                        i(class='fa fa-chain fa-fw')
+                    li(class='list-group-item')
+                        i(class='fa fa-bar-chart-o fa-fw')
                         |  Graylog Connected
                         span(class='pull-right text-muted small')
-                            em(class='log-tl-em-connected')
-                    li(class='list-group-item', href='#')
+                            em(class='log-tl-em-graylog-connected')
+                    li(class='list-group-item')
+                        i(class='fa fa-database fa-fw')
+                        |  WeedFS Connected
+                        span(class='pull-right text-muted small')
+                            em(class='log-tl-em-weed-fs-connected')
+                    li(class='list-group-item')
                         i(class='fa fa-info fa-fw')
                         |  Server Version
                         span(class='pull-right text-muted small')

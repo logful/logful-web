@@ -11,12 +11,9 @@ var weedFS = {
         var temporary = path.join(__dirname, '..', 'temporary/');
         var filePath = temporary + randomName;
 
-        var url;
-        if (config.weedMaster.indexOf('http://') > -1) {
-            url = config.weedMaster + '/' + fid;
-        }
-        else {
-            url = 'http://' + config.weedMaster + '/' + fid;
+        var url = config.weedMaster + '/' + fid;
+        if (url.indexOf('http://') == -1) {
+            url = 'http://' + url;
         }
 
         request({url: url}, function (error, response, body) {
