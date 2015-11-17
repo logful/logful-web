@@ -10,13 +10,10 @@ $(window).load(function () {
         success: function (data) {
             var text;
 
-            text = data.status == 0 ? "ok" : "error";
-            $('.log-tl-em-status').html(text);
-
-            text = data.graylog_connectedd ? "yes" : "no";
+            text = data.graylogConnected ? "true" : "false";
             $('.log-tl-em-graylog-connected').html(text);
 
-            text = data.weed_fs_connected ? "yes" : "no";
+            text = data.weedFSConnected ? "true" : "false";
             $('.log-tl-em-weed-fs-connected').html(text);
 
             $('.log-tl-em-version').html(data.version);
