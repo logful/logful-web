@@ -18,6 +18,12 @@
   "dashboardPage": {
     "pageTitle": "信息总览",
     "subTitle": "信息总览",
+    "weedFSStatus": {
+      "title": "WeedFS 状态",
+      "detail": "详细",
+      "detailDlgTitle": "详细信息",
+      "close": "关闭"
+    },
     "statusInfo": "系统信息",
     "resourceStatus": {
       "title": "资源状态",

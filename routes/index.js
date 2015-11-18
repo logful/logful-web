@@ -21,15 +21,59 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/index.html', function (req, res, next) {
-    if (req.session.user) {
-        res.render('dashboard', {
-            common: res.__('common'),
-            property: res.__('dashboardPage')
-        });
-    }
-    else {
-        res.redirect('/login.html');
-    }
+    var url = config.weedMaster + config.weedApi.master.dirStatus;
+    request({url: url}, function (error, response, body) {
+        if (error) {
+            res.render('dashboard', {
+                common: res.__('common'),
+                property: res.__('dashboardPage')
+            });
+        }
+        else {
+            if (response.statusCode == 200 && body) {
+                var data = JSON.parse(body);
+                var nodes = [];
+                data.Topology.DataCenters.forEach(function (dataCenter) {
+                    dataCenter.Racks.forEach(function (rack) {
+                        rack.DataNodes.forEach(function (dataNode) {
+                            var node = {
+                                dataCenter: dataCenter.Id,
+                                rack: rack.Id,
+                                remoteAddr: dataNode.Url,
+                                volumes: dataNode.Volumes,
+                                max: dataNode.Max
+                            };
+                            nodes.push(node);
+                        });
+                    });
+                });
+                res.render('dashboard', {
+                    common: res.__('common'),
+                    weedCluster: {
+                        nodes: nodes
+                    },
+                    property: res.__('dashboardPage')
+                });
+            }
+            else {
+                res.render('dashboard', {
+                    common: res.__('common'),
+                    property: res.__('dashboardPage')
+                });
+            }
+        }
+    });
+    /*
+     if (req.session.user) {
+     res.render('dashboard', {
+     common: res.__('common'),
+     property: res.__('dashboardPage')
+     });
+     }
+     else {
+     res.redirect('/login.html');
+     }
+     */
 });
 
 router.get('/uid.html', function (req, res, next) {

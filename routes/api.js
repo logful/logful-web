@@ -10,6 +10,58 @@ var config = require('../config/config');
 
 var weedFS = require('../utils/weedFS');
 
+router.get('/weed/volume/stats/disk', function (req, res) {
+    if (req.query.address) {
+        var url = req.query.address + config.weedApi.volume.statsDisk;
+        if (url.indexOf('http://') == -1) {
+            url = 'http://' + url;
+        }
+        request({url: url}, function (error, response, body) {
+            if (error) {
+                res.status(500).send({error: 'Request error!'});
+            }
+            else {
+                if (response.statusCode == 200 && body) {
+                    var data = JSON.parse(body);
+                    res.status(200).send(data);
+                }
+                else {
+                    res.status(500).send({error: 'Server error!'});
+                }
+            }
+        });
+    }
+    else {
+        res.status(404).send({error: 'No volume url!'});
+    }
+});
+
+router.get('/weed/volume/status', function (req, res) {
+    if (req.query.address) {
+        var url = req.query.address + config.weedApi.volume.status;
+        if (url.indexOf('http://') == -1) {
+            url = 'http://' + url;
+        }
+        request({url: url}, function (error, response, body) {
+            if (error) {
+                res.status(500).send({error: 'Request error!'});
+            }
+            else {
+                if (response.statusCode == 200 && body) {
+                    var data = JSON.parse(body);
+                    res.status(200).send(data);
+                }
+                else {
+                    res.status(500).send({error: 'Server error!'});
+                }
+            }
+        });
+    }
+    else {
+        res.status(404).send({error: 'No volume url!'});
+    }
+});
+
 router.get('/log/file/download', function (req, res) {
     if (!req.session.user) {
         res.status(401).send({error: 'User not authenticated!'});

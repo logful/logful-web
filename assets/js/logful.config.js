@@ -2,7 +2,15 @@ var LogWebConfig = {
     url: {
         dashboard: {
             status: "/proxy/web/dashboard/status",
-            resource: "/proxy/web/dashboard/resource"
+            resource: "/proxy/web/dashboard/resource",
+            weed: {
+                volume: {
+                    stats: {
+                        disk: '/api/weed/volume/stats/disk'
+                    },
+                    status: '/api/weed/volume/status'
+                }
+            }
         },
         uid: {
             list: "/proxy/web/uid/list",

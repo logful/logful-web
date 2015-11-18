@@ -18,6 +18,12 @@
   "dashboardPage": {
     "pageTitle": "Dashboard",
     "subTitle": "Dashboard",
+    "weedFSStatus": {
+      "title": "WeedFS Status",
+      "detail": "Detail",
+      "detailDlgTitle": "Detail Information",
+      "close": "Close"
+    },
     "statusInfo": "System Status Info",
     "resourceStatus": {
       "title": "Resource Status",

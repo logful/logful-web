@@ -1,4 +1,4 @@
-$(window).load(function () {
+$(document).ready(function () {
     $.ajax({
         url: LogWebConfig.url.dashboard.status,
         timeout: timeout,
@@ -58,6 +58,57 @@ $(window).load(function () {
                 use_percentage: false,
                 amount_format: function (p, t) {
                     return p + ' of ' + t;
+                }
+            });
+        }
+    });
+
+    $(".lf-show-vol-dt-btn").click(function () {
+        $("#lf-dashboard-vol-dt-dlg").modal("show");
+
+        var tbodyDiskStats = $(".lf-dashboard-disk-stats-tbody");
+        var tbodyVolumes = $(".lf-dashboard-volumes-tbody");
+
+        tbodyDiskStats.empty();
+        tbodyVolumes.empty();
+
+        var value = $(this).parent().parent().find("td").eq(2).html();
+        if (value) {
+            $.ajax({
+                url: LogWebConfig.url.dashboard.weed.volume.stats.disk,
+                timeout: timeout,
+                type: "GET",
+                dataType: "json",
+                data: {address: value},
+                success: function (data) {
+                    $.each(data.DiskStatuses, function () {
+                        var row = '<tr>'
+                            + '<td>' + this.Dir + '</td>'
+                            + '<td>' + filesize(this.All) + '</td>'
+                            + '<td>' + filesize(this.Used) + '</td>'
+                            + '<td>' + filesize(this.Free) + '</td>'
+                            + '</tr>';
+                        tbodyDiskStats.append(row);
+                    });
+                }
+            });
+
+            $.ajax({
+                url: LogWebConfig.url.dashboard.weed.volume.status,
+                timeout: timeout,
+                type: "GET",
+                dataType: "json",
+                data: {address: value},
+                success: function (data) {
+                    $.each(data.Volumes, function () {
+                        var row = '<tr>'
+                            + '<td>' + this.Id + '</td>'
+                            + '<td>' + filesize(this.Size) + '</td>'
+                            + '<td>' + this.FileCount + '</td>'
+                            + '<td>' + this.DeleteCount + ' / ' + filesize(this.DeletedByteCount) + '</td>'
+                            + '</tr>';
+                        tbodyVolumes.append(row);
+                    });
                 }
             });
         }
