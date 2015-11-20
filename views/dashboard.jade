@@ -34,6 +34,16 @@ block content
             div(class='panel-body')
                 div(class='list-group')
                     li(class='list-group-item')
+                        i(class='fa fa-info fa-fw')
+                        |  Server Version
+                        span(class='pull-right text-muted small')
+                            em(class='log-tl-em-version')
+                    li(class='list-group-item')
+                        i(class='fa fa-clock-o fa-fw')
+                        |  System Start Time
+                        span(class='pull-right text-muted small')
+                            em(class='log-tl-em-start-time')
+                    li(class='list-group-item')
                         i(class='fa fa-bar-chart-o fa-fw')
                         |  Graylog Connected
                         span(class='pull-right text-muted small')
@@ -44,10 +54,10 @@ block content
                         span(class='pull-right text-muted small')
                             em(class='log-tl-em-weed-fs-connected')
                     li(class='list-group-item')
-                        i(class='fa fa-info fa-fw')
-                        |  Server Version
+                        i(class='fa fa-warning fa-fw')
+                        |  WeedFS Error
                         span(class='pull-right text-muted small')
-                            em(class='log-tl-em-version')
+                            em(class='log-tl-em-weed-fs-error')
     div(class='col-lg-6')
         div(class='panel panel-default')
             div(class='panel-heading') #{property.resourceStatus.title}

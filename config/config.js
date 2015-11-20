@@ -6,21 +6,7 @@ var config = {
     },
     locale: 'zh-CN',
     logfulApi: 'http://127.0.0.1:9600',
-    weedMaster: 'http://127.0.0.1:9333',
-    weedApi: {
-        master: {
-            dirStatus: '/dir/status',
-            volStatus: '/vol/status',
-            statsCounter: '/stats/counter',
-            statsMemory: '/stats/memory'
-        },
-        volume: {
-            status: '/status',
-            statsCounter: '/stats/counter',
-            statsMemory: '/stats/memory',
-            statsDisk: '/stats/disk'
-        }
-    }
+    weedMaster: 'http://127.0.0.1:9333'
 };
 
 module.exports = config;

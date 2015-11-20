@@ -10,13 +10,19 @@ $(document).ready(function () {
         success: function (data) {
             var text;
 
+            $('.log-tl-em-version').html(data.version);
+
+            text = moment(data.startTime).format('YYYY/MM/DD HH:mm:ss.SSS');
+            $('.log-tl-em-start-time').html(text);
+
             text = data.graylogConnected ? "true" : "false";
             $('.log-tl-em-graylog-connected').html(text);
 
             text = data.weedFSConnected ? "true" : "false";
             $('.log-tl-em-weed-fs-connected').html(text);
 
-            $('.log-tl-em-version').html(data.version);
+            text = data.weedFSServerErrord ? "error" : "no error";
+            $('.log-tl-em-weed-fs-error').html(text);
         }
     });
 
@@ -37,7 +43,7 @@ $(document).ready(function () {
             pool.attr('data-transitiongoal', data.poolSize);
 
             queue.attr('aria-valuemax', data.capacity);
-            queue.attr('data-transitiongoal', data.active);
+            queue.attr('data-transitiongoal', data.queueSize);
 
             mem.progressbar({
                 display_text: 'center',

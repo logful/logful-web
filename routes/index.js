@@ -9,7 +9,9 @@ var crypto = require('crypto');
 var http = require('http');
 var request = require('request');
 var lineReader = require('line-reader');
-var config = require('../config/config');
+
+var Config = require('../config/config');
+var Constants = require('../constants');
 
 router.get('/', function (req, res, next) {
     if (req.session.user) {
@@ -21,59 +23,53 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/index.html', function (req, res, next) {
-    var url = config.weedMaster + config.weedApi.master.dirStatus;
-    request({url: url}, function (error, response, body) {
-        if (error) {
-            res.render('dashboard', {
-                common: res.__('common'),
-                property: res.__('dashboardPage')
-            });
-        }
-        else {
-            if (response.statusCode == 200 && body) {
-                var data = JSON.parse(body);
-                var nodes = [];
-                data.Topology.DataCenters.forEach(function (dataCenter) {
-                    dataCenter.Racks.forEach(function (rack) {
-                        rack.DataNodes.forEach(function (dataNode) {
-                            var node = {
-                                dataCenter: dataCenter.Id,
-                                rack: rack.Id,
-                                remoteAddr: dataNode.Url,
-                                volumes: dataNode.Volumes,
-                                max: dataNode.Max
-                            };
-                            nodes.push(node);
-                        });
-                    });
-                });
+    if (req.session.user) {
+        var url = Config.weedMaster + Constants.weedApi.master.dirStatus;
+        request({url: url}, function (error, response, body) {
+            if (error) {
                 res.render('dashboard', {
                     common: res.__('common'),
-                    weedCluster: {
-                        nodes: nodes
-                    },
                     property: res.__('dashboardPage')
                 });
             }
             else {
-                res.render('dashboard', {
-                    common: res.__('common'),
-                    property: res.__('dashboardPage')
-                });
+                if (response.statusCode == 200 && body) {
+                    var data = JSON.parse(body);
+                    var nodes = [];
+                    data.Topology.DataCenters.forEach(function (dataCenter) {
+                        dataCenter.Racks.forEach(function (rack) {
+                            rack.DataNodes.forEach(function (dataNode) {
+                                var node = {
+                                    dataCenter: dataCenter.Id,
+                                    rack: rack.Id,
+                                    remoteAddr: dataNode.Url,
+                                    volumes: dataNode.Volumes,
+                                    max: dataNode.Max
+                                };
+                                nodes.push(node);
+                            });
+                        });
+                    });
+                    res.render('dashboard', {
+                        common: res.__('common'),
+                        weedCluster: {
+                            nodes: nodes
+                        },
+                        property: res.__('dashboardPage')
+                    });
+                }
+                else {
+                    res.render('dashboard', {
+                        common: res.__('common'),
+                        property: res.__('dashboardPage')
+                    });
+                }
             }
-        }
-    });
-    /*
-     if (req.session.user) {
-     res.render('dashboard', {
-     common: res.__('common'),
-     property: res.__('dashboardPage')
-     });
-     }
-     else {
-     res.redirect('/login.html');
-     }
-     */
+        });
+    }
+    else {
+        res.redirect('/login.html');
+    }
 });
 
 router.get('/uid.html', function (req, res, next) {
@@ -124,7 +120,7 @@ router.get('/log/viewer.html', function (req, res) {
         res.status(400).send({error: 'Request param error!'});
     }
 
-    var resource = config.weedMaster + '/' + fid;
+    var resource = Config.weedMaster + '/' + fid;
     if (resource.indexOf('http://') == -1) {
         resource = 'http://' + resource;
     }
@@ -205,7 +201,7 @@ router.post('/login.html', function (req, res) {
     var remember = req.body.remember;
     if (username && password) {
         var hashPassword = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
-        if (username === config.security.username && hashPassword === config.security.password) {
+        if (username === Config.security.username && hashPassword === Config.security.password) {
             req.session.user = username;
             if (remember && remember === 'true') {
                 req.session.cookie.maxAge = 3600000;

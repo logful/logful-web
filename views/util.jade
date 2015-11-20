@@ -33,10 +33,10 @@ block content
             div(class='panel-body')
                 form(class='log-tl-form-attachment', role='form', data-delay='300')
                     // attachmentId
-                    div(class='form-group')
-                        label #{property.downloadAttachment.attachmentID}
-                        input(name='attachmentId', class='form-control log-tl-form-attachment-id', required)
-                    a(class='log-tl-btn-dl-attachment btn btn-primary disabled', target='_blank') #{property.downloadAttachment.submit}
+                    div(class='input-group')
+                        input(name='attachmentId', type='text', class='form-control log-tl-form-attachment-id', placeholder='Attachment ID...' required)
+                        span(class='input-group-btn')
+                            a(class='btn btn-default lf-att-dl-btn disabled', type='button', target='_blank') #{property.downloadAttachment.submit}
     div(class='col-lg-6')
         div(class='panel panel-default')
             div(class='panel-heading') #{property.decryptLogFile.title}

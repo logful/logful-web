@@ -1,4 +1,4 @@
-var table, fetchForm, attachmentForm, decryptForm;
+var table, fetchForm, decryptForm;
 var fetchFormValid = false;
 var decryptFormValid = false;
 
@@ -39,8 +39,6 @@ var operationCol = function (entry) {
 };
 
 $(document).ready(function () {
-    var link = $(".log-tl-btn-dl-attachment");
-
     table = $('#log-tl-table-log-file-list').DataTable({
         responsive: true
     });
@@ -52,9 +50,6 @@ $(document).ready(function () {
         fetchFormValid = !validator.hasErrors();
     });
 
-    attachmentForm = $(".log-tl-form-attachment");
-    attachmentForm.validator();
-
     decryptForm = $(".log-tl-form-decrypt");
     decryptForm.validator();
     decryptForm.on('validated.bs.validator', function () {
@@ -62,11 +57,12 @@ $(document).ready(function () {
         decryptFormValid = !validator.hasErrors();
     });
 
+    var link = $(".lf-att-dl-btn");
     var input = $(".log-tl-form-attachment-id");
     input.bind('input', function () {
         var value = input.val();
         if (value.match("[a-fA-F0-9]{32}")) {
-            link.attr('href', LogWebConfig.url.util.attachment.download + '/' + value);
+            link.attr('href', LogWebConfig.url.util.attachment.download + '?id=' + value);
             link.removeClass('disabled');
         }
         else {

@@ -9,11 +9,11 @@ var i18n = require("i18n");
 var flash = require('connect-flash');
 var proxy = require('express-http-proxy');
 
-var config = require('./config/config');
+var Config = require('./config/config');
 
 i18n.configure({
     locales: ['en', 'zh-CN'],
-    defaultLocale: config.locale,
+    defaultLocale: Config.locale,
     directory: __dirname + '/locales'
 });
 
@@ -31,7 +31,7 @@ app.set('view engine', 'jade');
 app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
 app.use(logger('dev'));
 
-app.use('/proxy', proxy(config.logfulApi, {
+app.use('/proxy', proxy(Config.logfulApi, {
     decorateRequest: function (req) {
         // TODO
         return req;
@@ -50,7 +50,6 @@ app.use(flash());
 
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use('/static', express.static(__dirname + '/bower_components'));
-app.use('/attachment', express.static(config.dataPath + '/attachment'));
 
 app.use('/', routes);
 app.use('/api', api);

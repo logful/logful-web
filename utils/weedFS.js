@@ -3,7 +3,7 @@ var path = require("path");
 var fs = require('fs');
 var request = require('request');
 
-var config = require('../config/config');
+var Config = require('../config/config');
 
 var weedFS = {
     read: function (fid, callback) {
@@ -11,7 +11,7 @@ var weedFS = {
         var temporary = path.join(__dirname, '..', 'temporary/');
         var filePath = temporary + randomName;
 
-        var url = config.weedMaster + '/' + fid;
+        var url = Config.weedMaster + '/' + fid;
         if (url.indexOf('http://') == -1) {
             url = 'http://' + url;
         }
