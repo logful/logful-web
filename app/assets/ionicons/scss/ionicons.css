@@ -1,0 +1,45 @@
+/*
+Error: Invalid US-ASCII character "\xE2"
+        on line 8 of ionicons.scss
+
+3:   Ionicons, v#{$ionicons-version}
+4:   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
+5:   https://twitter.com/benjsperry  https://twitter.com/ionicframework
+6:   MIT License: https://github.com/driftyco/ionicons
+7: 
+8:   Android-style icons originally built by Google’s
+9:   Material Design Icons: https://github.com/google/material-design-icons
+10:   used under CC BY http://creativecommons.org/licenses/by/4.0/
+11:   Modified icons to fit ionicon’s grid from original.
+12: *\/
+13: 
+
+Backtrace:
+ionicons.scss:8
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/util.rb:1296:in `rescue in block in find_encoding_error'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/util.rb:1293:in `block in find_encoding_error'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/util.rb:1292:in `each'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/util.rb:1292:in `each_with_index'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/util.rb:1292:in `find_encoding_error'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/util.rb:901:in `check_sass_encoding'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/engine.rb:433:in `check_encoding!'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/engine.rb:389:in `_to_tree'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/engine.rb:378:in `_render_with_sourcemap'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/engine.rb:295:in `render_with_sourcemap'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/plugin/compiler.rb:490:in `update_stylesheet'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/plugin/compiler.rb:209:in `each'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/plugin.rb:82:in `update_stylesheets'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/exec/sass_scss.rb:361:in `watch_or_update'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/exec/base.rb:52:in `parse'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/lib/sass/exec/base.rb:19:in `parse!'
+/Library/Ruby/Gems/2.0.0/gems/sass-3.4.19/bin/scss:13:in `<top (required)>'
+/usr/local/bin/scss:23:in `load'
+/usr/local/bin/scss:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid US-ASCII character \"\xE2\"\A         on line 8 of ionicons.scss\A \A 3:   Ionicons, v#{$ionicons-version}\A 4:   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/\A 5:   https://twitter.com/benjsperry  https://twitter.com/ionicframework\A 6:   MIT License: https://github.com/driftyco/ionicons\A 7: \A 8:   Android-style icons originally built by Google’s\A 9:   Material Design Icons: https://github.com/google/material-design-icons\A 10:   used under CC BY http://creativecommons.org/licenses/by/4.0/\A 11:   Modified icons to fit ionicon’s grid from original.\A 12: */\A 13: "; }
