@@ -3,6 +3,7 @@ import { pushState } from 'redux-router';
 import { connect } from 'react-redux';
 import AppCard from '../../components/AppCard';
 import { list } from '../../action/application';
+import { adminSidebar } from '../../action/layout';
 
 export const ActionType = {
     remove: 'remove',
@@ -22,6 +23,9 @@ export default class ListApp extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(adminSidebar({
+            active: 0
+        }));
         this.props.dispatch(list());
     }
 
@@ -39,7 +43,6 @@ export default class ListApp extends Component {
     }
 
     render() {
-        const { apps } = this.props;
         const appCardHandler = this.handleAppCardEvent;
         return (
             <div className="row">
@@ -59,7 +62,7 @@ export default class ListApp extends Component {
                     </div>
                 </div>
                 {
-                    apps.map(function (item) {
+                    this.props.apps.map(function (item) {
                         return <AppCard key={item.id} appData={item} handleAppCardEvent={appCardHandler}/>
                     })
                 }

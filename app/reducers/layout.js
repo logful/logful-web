@@ -1,18 +1,22 @@
 import {
-    FETCH_APP_LIST
+    REFRESH_LAYOUT,
+    ADMIN_MENU_DATA
 } from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-    apps: []
+    sidebar: {
+        data: ADMIN_MENU_DATA,
+        active: 0
+    }
 };
 
 const actionHandlers = {
-    FETCH_APP_LIST: (state, action) => {
+    REFRESH_LAYOUT: (state, action) => {
         switch (action.type) {
-            case FETCH_APP_LIST:
+            case REFRESH_LAYOUT:
                 return Object.assign({}, state, {
-                    apps: action.apps
+                    sidebar: action.sidebar
                 })
         }
         return state;

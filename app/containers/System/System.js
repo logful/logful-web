@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { adminSidebar } from '../../action/layout';
 
 export default class System extends Component {
 
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        this.props.dispatch(adminSidebar({
+            active: 1
+        }));
     }
 
     render() {
@@ -34,3 +42,5 @@ export default class System extends Component {
         );
     }
 }
+
+export default connect()(System)

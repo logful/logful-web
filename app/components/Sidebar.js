@@ -8,22 +8,39 @@ export default class Sidebar extends Component {
     }
 
     render() {
-        return (
-            <section className="sidebar">
-                <ul className="sidebar-menu">
-                    <li className="header">MAIN NAVIGATION</li>
-                    <li className="active">
-                        <Link to='/'>
-                            <i className="fa fa-cubes"/> <span>应用管理</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to='/system'>
-                            <i className="fa fa-dashboard"/> <span>系统状态</span>
-                        </Link>
-                    </li>
-                </ul>
-            </section>
-        );
+        const sidebar = this.props.data;
+        if (!sidebar) {
+            return (
+                <section className="sidebar">
+                </section>
+            );
+        }
+        else {
+            return (
+                <section className="sidebar">
+                    <ul className="sidebar-menu">
+                        <li className="header">{sidebar.data.header.name}</li>
+                        {
+                            sidebar.data.menus.map(function (item, index) {
+                                let icon = 'fa ' + item.icon;
+                                let active = index == sidebar.active ? 'active' : null;
+                                return (
+                                    <li key={item.route} className={active}>
+                                        <Link to={item.route}>
+                                            <i className={icon}/>&nbsp;
+                                            <span>{item.name}</span>
+                                        </Link>
+                                    </li>
+                                );
+                            })
+                        }
+                    </ul>
+                </section>
+            );
+        }
     }
 }
+
+Sidebar.propTypes = {
+    data: PropTypes.object.isRequired
+};

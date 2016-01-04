@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Sidebar from '../../components/Sidebar';
 import PageTitle from '../../components/PageTitle';
 
@@ -47,9 +48,8 @@ export default class Layout extends Component {
                 {/* Sidebar */}
                 <aside className="main-sidebar">
                     <section className="sidebar">
-                        <Sidebar test={['3423412342']}/>
+                        <Sidebar data={this.props.sidebar}/>
                     </section>
-
                 </aside>
 
                 {/* Content */}
@@ -71,3 +71,18 @@ export default class Layout extends Component {
         );
     }
 }
+
+Layout.propTypes = {
+    sidebar: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
+};
+
+function mapStateToProps(state) {
+    const sidebar = state.layout.sidebar;
+    if (sidebar) {
+        return {sidebar};
+    }
+    return {};
+}
+
+export default connect(mapStateToProps)(Layout)
