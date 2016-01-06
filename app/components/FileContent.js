@@ -1,40 +1,72 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { clearFile } from '../action/logFile';
+import { formatUnix } from '../helpers/datetime';
+import { levelToString } from '../helpers/common';
 
 export default class FileContent extends Component {
 
     constructor(props) {
         super(props);
         this.closeContentView = this.closeContentView.bind(this);
+        this.dataTable = null;
     }
 
     componentDidMount() {
-        let dataTable = jQuery('#file-content-table').DataTable({
+
+    }
+
+    componentDidUpdate() {
+        let table = jQuery('#file-content-table').DataTable({
             responsive: true,
             lengthChange: false,
             info: false,
-            paging: false
+            paging: true,
+            iDisplayLength: 25
         });
         jQuery('#file-content-table-search').keyup(function () {
-            dataTable.search(this.value).draw();
+            table.search(this.value).draw();
         });
+        this.dataTable = table;
+    }
+
+    componentWillUnmount() {
+        if (this.dataTable) {
+            this.dataTable.destroy();
+        }
     }
 
     closeContentView(event) {
         event.preventDefault();
+        if (this.dataTable) {
+            this.dataTable.destroy();
+        }
         this.props.dispatch(clearFile());
+        console.log(this.dataTable);
+    }
+
+    filename(meta) {
+        return meta.loggerName + '-'
+            + formatUnix(meta.date / 1000, 'YYYYMMDD') + '-'
+            + levelToString(meta.level) + '-'
+            + meta.fragment;
     }
 
     render() {
-        const file = this.props.file;
-        if (file.meta && file.lines) {
+        const { file } = this.props;
+        if (Object.keys(file.meta).length == 0) {
+            return (
+                <div>
+                </div>
+            );
+        }
+        else {
             return (
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="box box-info">
                             <div className="box-header">
-                                <h3 className="box-title">{file.meta.filename}</h3>
+                                <h3 className="box-title">{this.filename(file.meta)}</h3>
                                 <div className="box-tools">
                                     <div className="input-group" style={{width: '220px'}}>
                                         <input type="text" id="file-content-table-search"
@@ -50,7 +82,7 @@ export default class FileContent extends Component {
                             <div className="box-body no-padding">
                                 <table id="file-content-table"
                                        style={{marginTop: '0px !important', marginBottom:'0px !important'}}
-                                       className="table table-striped table-bordered table-hover">
+                                       className="table table-striped table-bordered table-hover table-condensed">
                                     <thead>
                                     <tr>
                                         <th>#</th>
@@ -66,7 +98,7 @@ export default class FileContent extends Component {
                                             return (
                                                 <tr key={order}>
                                                     <td>{order}</td>
-                                                    <td>{item.timestamp}</td>
+                                                    <td>{item.date}</td>
                                                     <td>{item.tag}</td>
                                                     <td>{item.msg}</td>
                                                 </tr>
@@ -93,11 +125,6 @@ export default class FileContent extends Component {
                         </div>
                     </div>
                 </div>
-            );
-        }
-        else {
-            return (
-                <div></div>
             );
         }
     }

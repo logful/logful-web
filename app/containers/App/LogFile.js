@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import FileContent from '../../components/FileContent';
 import { appSidebar } from '../../action/layout';
-import { fetchFiles } from '../../action/logFile';
+import { fetchFiles, fetchFile, clearFiles, clearFile } from '../../action/logFile';
 import { Select } from 'react-select';
 import { formatNow, formatUnix } from '../../helpers/datetime';
 import { levelToString, levelSpanClass, fileSize } from '../../helpers/common';
@@ -19,17 +19,18 @@ export default class LogFile extends Component {
         this.performSearch = this.performSearch.bind(this);
         this.handleUidChange = this.handleUidChange.bind(this);
         this.handleAppIdChange = this.handleAppIdChange.bind(this);
+        this.viewFileContent = this.viewFileContent.bind(this);
+        this.downloadFile = this.downloadFile.bind(this);
     }
 
     componentDidMount() {
-        const params = this.props.params;
         this.props.dispatch(appSidebar({
-            id: params.id,
+            id: this.props.params.id,
             active: 2
         }));
-        const props = this;
+        const self = this;
         jQuery('.select2').select2().on('change', function (e) {
-            props.setState({
+            self.setState({
                 level: e.target.value
             });
         });
@@ -38,11 +39,16 @@ export default class LogFile extends Component {
                 format: 'YYYY/MM/DD'
             }
         }).on('apply.daterangepicker', function (event, picker) {
-            props.setState({
+            self.setState({
                 startDate: picker.startDate.format('YYYY/MM/DD'),
                 endDate: picker.endDate.format('YYYY/MM/DD')
             });
         });
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(clearFiles());
+        this.props.dispatch(clearFile());
     }
 
     handleUidChange(event) {
@@ -63,11 +69,20 @@ export default class LogFile extends Component {
         this.props.dispatch(fetchFiles(option));
     }
 
+    viewFileContent(params) {
+        this.props.dispatch(fetchFile(params));
+    }
+
+    downloadFile(param) {
+        // TODO
+    }
+
     render() {
-        const { files } = this.props;
+        const { files, file } = this.props;
+        const viewFile = this.viewFileContent;
+        const downloadFile = this.downloadFile;
         return (
             <div>
-                <FileContent file={this.props.file}/>
                 <div className="box box-primary">
                     <div className="box-header with-border">
                         <h3 className="box-title">日志文件检索</h3>
@@ -135,7 +150,7 @@ export default class LogFile extends Component {
                                         files.map(function (item, index) {
                                             let order = index + 1;
                                             let dateString = formatUnix(item.date / 1000, 'YYYY/MM/DD');
-                                            let levelString = levelToString(item.level);
+                                            let levelString = levelToString(item.level).toUpperCase();
                                             let levelClass = 'label ' + levelSpanClass(item.level);
                                             let sizeString = fileSize(item.size);
                                             return (
@@ -150,10 +165,12 @@ export default class LogFile extends Component {
                                                     </td>
                                                     <td>
                                                         <button className="btn btn-primary btn-xs"
+                                                                onClick={viewFile.bind(this, item)}
                                                                 style={{width: '50px', marginRight: '10px'}}>
                                                             <i className="fa fa-eye"/>&nbsp;查看
                                                         </button>
                                                         <button className="btn btn-success btn-xs"
+                                                                onClick={downloadFile.bind(this, item)}
                                                                 style={{width: '50px'}}>
                                                             <i className="fa fa-download"/>&nbsp;下载
                                                         </button>
@@ -168,6 +185,7 @@ export default class LogFile extends Component {
                         </div>
                     </div>
                 </div>
+                <FileContent file={file}/>
             </div>
         );
     }

@@ -3,21 +3,21 @@ var fileSizeLib = require('filesize');
 export function levelToString(level) {
     switch (level) {
         case 1:
-            return 'VERBOSE';
+            return 'verbose';
         case 2:
-            return 'DEBUG';
+            return 'debug';
         case 3:
-            return 'INFO';
+            return 'info';
         case 4:
-            return 'WARN';
+            return 'warn';
         case 5:
-            return 'ERROR';
+            return 'error';
         case 6:
-            return 'EXCEPTION';
+            return 'exception';
         case 7:
-            return 'FATAL';
+            return 'fatal';
         default:
-            return 'VERBOSE';
+            return 'verbose';
     }
 }
 

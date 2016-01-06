@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import * as URLHelper from '../helpers/urls';
 import { API_URI } from '../constants';
-import parseResponse from '../helpers/parseResponse';
+import parseResponse, { parseLogFileResponse } from '../helpers/parseResponse';
 import handleActionError from '../helpers/handleActionError';
 import {
     UPDATE_LOG_FILE_LIST,
@@ -22,7 +22,21 @@ export function fetchFiles(option) {
 }
 
 export function fetchFile(option) {
-
+    if (option.id) {
+        let url = URLHelper.formatUrl(API_URI.logFile) + '/' + option.id;
+        return dispatch => {
+            fetch(url)
+                .then(parseLogFileResponse)
+                .then(res => dispatch({
+                    type: UPDATE_LOG_FILE_ITEM,
+                    file: {
+                        meta: option,
+                        lines: res
+                    }
+                }))
+                .catch(error => handleActionError(dispatch, error, UPDATE_LOG_FILE_ITEM))
+        };
+    }
 }
 
 export function clearFiles(option) {

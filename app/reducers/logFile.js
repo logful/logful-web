@@ -6,7 +6,10 @@ import createReducer from '../utils/createReducer';
 
 const initialState = {
     files: [],
-    file: {}
+    file: {
+        meta: {},
+        lines: []
+    }
 };
 
 const actionHandlers = {

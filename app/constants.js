@@ -19,6 +19,8 @@ export const UPDATE_APP_ITEM = 'UPDATE_APP_ITEM';
 export const UPDATE_LOG_FILE_LIST = 'UPDATE_LOG_FILE_LIST';
 export const UPDATE_LOG_FILE_ITEM = 'UPDATE_LOG_FILE_ITEM';
 
+export const UPDATE_CLIENT_USER_LIST = 'UPDATE_CLIENT_USER_LIST';
+
 export const ADMIN_MENU_DATA = {
     header: {name: '系统管理页'},
     menus: [
@@ -40,6 +42,7 @@ export const API_PORT = '8100';
 export const API_URI = {
     app: '/api/app',
     logFile: '/api/log/file',
+    clientUser: '/api/user',
     weed: {
         dirStatus: '/api/weed/dir/status',
         volumeStatus: '/api/weed/volume/status',

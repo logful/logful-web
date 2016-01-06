@@ -23,12 +23,12 @@ export default class AppInfo extends Component {
 
     showDeleteAppModal(event) {
         event.preventDefault();
-        $('#confirm-delete-modal').modal('show');
+        jQuery('#confirm-delete-modal').modal('show');
     }
 
     confirmDeleteApp(event) {
         event.preventDefault();
-        var modal = $('#confirm-delete-modal');
+        var modal = jQuery('#confirm-delete-modal');
         modal.on('hidden.bs.modal', this.modalHideCallback);
         modal.modal('hide');
     }
@@ -141,7 +141,7 @@ export default class AppInfo extends Component {
                         </div>
                     </div>
                     {/* Confirm delete app dialog */}
-                    <div id="confirm-delete-modal" className="modal fade">
+                    <div id="confirm-delete-modal" className="modal" role="dialog">
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
@@ -151,7 +151,7 @@ export default class AppInfo extends Component {
                                     <h4 className="modal-title">删除应用</h4>
                                 </div>
                                 <div className="modal-body">
-                                    <p>One fine body…</p>
+                                    <p>确定要删除应用吗?</p>
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-default pull-left" data-dismiss="modal">
