@@ -32,10 +32,10 @@ export default function routes(store) {
                 <Route path="/" component={ListApp}/>
                 <Route path="/system" component={System}/>
                 <Route path="/app/create" component={CreateApp}/>
-                <Route path="/app/info" component={AppInfo}/>
-                <Route path="/app/user" component={ClientUser}/>
-                <Route path="/app/file" component={LogFile}/>
-                <Route path="/app/control" component={Control}/>
+                <Route path="/app/:id/info" component={AppInfo}/>
+                <Route path="/app/:id/user" component={ClientUser}/>
+                <Route path="/app/:id/file" component={LogFile}/>
+                <Route path="/app/:id/control" component={Control}/>
                 <Route path="*" component={NotFound}/>
             </Route>
         </Route>

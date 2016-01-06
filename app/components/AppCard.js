@@ -16,10 +16,11 @@ export default class AppCard extends Component {
             this.setState({deleteMode: true});
         }
         else {
+            const data = this.props.appData;
             if (this.props.handleAppCardEvent) {
                 this.props.handleAppCardEvent({
                     type: type,
-                    data: {}
+                    data: data
                 }, event);
             }
         }

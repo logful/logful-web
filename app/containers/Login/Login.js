@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
+import 'ionicons/css/ionicons.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import '../../assets/bootstrap/css/bootstrap.css';
-import '../../assets/font-awesome/css/font-awesome.css';
-import '../../assets/ionicons/css/ionicons.css';
 import '../../assets/admin-lte/css/AdminLTE.css';
 import '../../assets/plugins/iCheck/square/blue.css';
 
-import 'jquery';
+import '../../assets/plugins/jQuery/jQuery-2.1.4.min';
 import '../../assets/bootstrap/js/bootstrap';
 import '../../assets/plugins/iCheck/icheck';
 

@@ -1,24 +1,23 @@
 import {
-    UPDATE_APP_LIST,
-    UPDATE_APP_ITEM
+    UPDATE_LOG_FILE_LIST,
+    UPDATE_LOG_FILE_ITEM
 } from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-    apps: [],
-    app: {},
-    editApp: {}
+    files: [],
+    file: {}
 };
 
 const actionHandlers = {
-    UPDATE_APP_LIST: (state, action) => {
+    UPDATE_LOG_FILE_LIST: (state, action) => {
         return Object.assign({}, state, {
-            apps: action.apps
+            files: action.files
         })
     },
-    UPDATE_APP_ITEM: (state, action) => {
+    UPDATE_LOG_FILE_ITEM: (state, action) => {
         return Object.assign({}, state, {
-            app: action.app
+            file: action.file
         })
     }
 };

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { pushState } from 'redux-router';
 import { connect } from 'react-redux';
 import AppCard from '../../components/AppCard';
-import { list } from '../../action/application';
+import { fetchApps } from '../../action/application';
 import { adminSidebar } from '../../action/layout';
 
 export const ActionType = {
@@ -26,7 +26,7 @@ export default class ListApp extends Component {
         this.props.dispatch(adminSidebar({
             active: 0
         }));
-        this.props.dispatch(list());
+        this.props.dispatch(fetchApps());
     }
 
     createApp(event) {
@@ -37,7 +37,7 @@ export default class ListApp extends Component {
     handleAppCardEvent(action) {
         if (action && action.type && action.data) {
             if (action.type == ActionType.edit) {
-                this.props.history.pushState({}, '/app/info');
+                this.props.history.pushState({}, '/app/' + action.data.id + '/info');
             }
         }
     }
@@ -77,6 +77,7 @@ ListApp.propTypes = {
 };
 
 function mapStateToProps(state) {
+    console.log('======', state);
     const apps = state.application.apps;
     if (apps) {
         return {apps};

@@ -3,16 +3,31 @@ import { connect } from 'react-redux';
 import Sidebar from '../../components/Sidebar';
 import PageTitle from '../../components/PageTitle';
 
-import '../../assets/bootstrap/css/bootstrap.css';
-import '../../assets/font-awesome/css/font-awesome.css';
-import '../../assets/ionicons/css/ionicons.css';
-import '../../assets/admin-lte/css/AdminLTE.css';
-import '../../assets/admin-lte/css/skins/_all-skins.css';
+import '../../assets/bootstrap/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+import 'ionicons/css/ionicons.min.css';
+import '../../assets/plugins/datatables/dataTables.bootstrap.css';
+import '../../assets/plugins/daterangepicker/daterangepicker.css'
+import '../../assets/admin-lte/css/skins/_all-skins.min.css';
+import '../../assets/plugins/iCheck/all.css';
+import '../../assets/plugins/timepicker/bootstrap-timepicker.min.css';
+import '../../assets/plugins/select2/select2.min.css';
+import '../../assets/admin-lte/css/AdminLTE.min.css';
+import '../../assets/css/logful-style.css'
 
-import 'jquery';
-import '../../assets/bootstrap/js/bootstrap';
-import '../../assets/admin-lte/js/app';
-import '../../assets/plugins/slimScroll/jquery.slimscroll';
+import '../../assets/plugins/jQuery/jQuery-2.1.4.min';
+import '../../assets/bootstrap/js/bootstrap.min';
+
+import '../../assets/plugins/datatables/jquery.dataTables.min';
+import '../../assets/plugins/datatables/dataTables.bootstrap.min';
+import '../../assets/plugins/slimScroll/jquery.slimscroll.min';
+
+import '../../assets/plugins/select2/select2.min';
+import '../../assets/plugins/iCheck/icheck.min';
+import '../../assets/plugins/daterangepicker/moment.min';
+import '../../assets/plugins/daterangepicker/daterangepicker';
+
+import '../../assets/admin-lte/js/app.min';
 
 export default class Layout extends Component {
 

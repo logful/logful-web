@@ -13,13 +13,9 @@ const initialState = {
 
 const actionHandlers = {
     REFRESH_LAYOUT: (state, action) => {
-        switch (action.type) {
-            case REFRESH_LAYOUT:
-                return Object.assign({}, state, {
-                    sidebar: action.sidebar
-                })
-        }
-        return state;
+        return Object.assign({}, state, {
+            sidebar: action.sidebar
+        })
     }
 };
 
