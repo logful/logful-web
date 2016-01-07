@@ -21,6 +21,9 @@ export const UPDATE_LOG_FILE_ITEM = 'UPDATE_LOG_FILE_ITEM';
 
 export const UPDATE_CLIENT_USER_LIST = 'UPDATE_CLIENT_USER_LIST';
 
+export const UPDATE_CRASH_FILE_LIST = 'UPDATE_CRASH_FILE_LIST';
+export const UPDATE_CRASH_FILE_ITEM = 'UPDATE_CRASH_FILE_ITEM';
+
 export const ADMIN_MENU_DATA = {
     header: {name: '系统管理页'},
     menus: [
@@ -37,12 +40,28 @@ export const ADMIN_MENU_DATA = {
     ]
 };
 
+export const InputField = {
+    name: 'name',
+    description: 'description',
+    id: 'id',
+    uid: 'uid',
+    alias: 'alias',
+    model: 'model',
+    imei: 'imei',
+    macAddress: 'macAddress',
+    osVersion: 'osVersion',
+    appId: 'appId',
+    version: 'version',
+    versionString: 'versionString'
+};
+
 export const API_HOST = '127.0.0.1';
 export const API_PORT = '8100';
 export const API_URI = {
     app: '/api/app',
     logFile: '/api/log/file',
     clientUser: '/api/user',
+    crashFile: '/api/crash/file',
     weed: {
         dirStatus: '/api/weed/dir/status',
         volumeStatus: '/api/weed/volume/status',

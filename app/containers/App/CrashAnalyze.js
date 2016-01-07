@@ -1,29 +1,28 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { appSidebar } from '../../action/layout';
-import { fetchUsers, clearUsers } from '../../action/clientUser';
-import { platformIcon } from '../../helpers/common';
+import { fileSize, platformIcon } from '../../helpers/common';
+import { fetchCrashFiles, fetchCrashFile } from '../../action/crashFile';
 import { InputField } from '../../constants';
 
-export default class ClientUser extends Component {
+export default class CrashAnalyze extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            user: {},
             filter: {
                 platform: 0
             }
         };
-        this.performSearch = this.performSearch.bind(this);
         this.handleInputValueChange = this.handleInputValueChange.bind(this);
-        this.showUserDetail = this.showUserDetail.bind(this);
+        this.performSearch = this.performSearch.bind(this);
     }
 
     componentDidMount() {
+        const params = this.props.params;
         this.props.dispatch(appSidebar({
-            id: this.props.params.id,
-            active: 1
+            id: params.id,
+            active: 3
         }));
         const self = this;
         jQuery('.select2').select2().on('change', function (e) {
@@ -33,10 +32,14 @@ export default class ClientUser extends Component {
                 }
             });
         });
-    }
-
-    componentWillUnmount() {
-        this.props.dispatch(clearUsers());
+        jQuery('input[name="daterange"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'YYYY/MM/DD'
+            }
+        }).on('apply.daterangepicker', function (event, picker) {
+            jQuery(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        });
     }
 
     handleInputValueChange(field, event) {
@@ -47,93 +50,41 @@ export default class ClientUser extends Component {
     performSearch(event) {
         event.preventDefault();
         const option = this.state.filter;
-        this.props.dispatch(fetchUsers(option));
-    }
-
-    showUserDetail(data) {
-        event.preventDefault();
-        this.setState({
-            user: data
-        });
-        const self = this;
-        var modal = jQuery('#show-user-detail-modal');
-        modal.on('hidden.bs.modal', function () {
-            self.setState({
-                user: {}
-            });
-        });
-        modal.modal('show');
-    }
-
-    detailElement(name, value) {
-        return (
-            <li>
-                <div style={{padding: '5px 5px'}}>
-                    <b>{name}</b>
-                    <span className="pull-right">{value}</span>
-                </div>
-            </li>
-        );
+        this.props.dispatch(fetchCrashFiles(option));
     }
 
     render() {
-        const { users } = this.props;
-        const userDetail = this.showUserDetail;
-        let modalContent;
-        const { user } = this.state;
-        if (Object.keys(user).length != 0) {
-            modalContent = <div>
-                <ul className="nav nav-stacked">
-                    {this.detailElement('平台', platformIcon(user.platform))}
-                    {this.detailElement('UID', user.uid)}
-                    {this.detailElement('用户别名', user.alias)}
-                    {this.detailElement('设备型号', user.model)}
-                    {this.detailElement('IMEI', user.imei)}
-                    {this.detailElement('MAC 地址', user.macAddress)}
-                    {this.detailElement('系统版本', user.osVersion)}
-                    {this.detailElement('应用 ID', user.appId)}
-                    {this.detailElement('应用版本号', user.version)}
-                    {this.detailElement('应用版本信息', user.versionString)}
-                    {this.detailElement('日志打开状态', user.recordOn.toString())}
-                </ul>
-            </div>
-        }
         return (
             <div>
-                <div id="show-user-detail-modal" className="modal modal-info" role="dialog">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal"
-                                        aria-label="Close"><span
-                                    aria-hidden="true">×</span></button>
-                                <h4 className="modal-title">用户详细信息</h4>
-                            </div>
-                            <div className="modal-body">{modalContent}</div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-outline" data-dismiss="modal">关闭</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="box box-primary">
                             <div className="box-header with-border">
-                                <h3 className="box-title">检索用户</h3>
+                                <h3 className="box-title">检索崩溃日志文件</h3>
                             </div>
                             <div className="box-body">
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <div className="input-group">
-                                                <span className="input-group-addon">平台</span>
+                                                <div className="input-group-addon">
+                                                    平台
+                                                </div>
                                                 <select name="platform" className="form-control select2"
                                                         style={{width: '100%', display: 'none'}}>
                                                     <option value="0">ALL</option>
                                                     <option value="1">Android</option>
                                                     <option value="2">iOS</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="input-group">
+                                                <span className="input-group-addon">ID</span>
+                                                <input type="text"
+                                                       onChange={this.handleInputValueChange.bind(this, InputField.id)}
+                                                       className="form-control"
+                                                       placeholder="输入文件 ID"/>
                                             </div>
                                         </div>
                                         <div className="form-group">
@@ -147,7 +98,7 @@ export default class ClientUser extends Component {
                                         </div>
                                         <div className="form-group">
                                             <div className="input-group">
-                                                <span className="input-group-addon">用户别名</span>
+                                                <span className="input-group-addon">别名</span>
                                                 <input type="text"
                                                        onChange={this.handleInputValueChange.bind(this, InputField.alias)}
                                                        className="form-control"
@@ -156,7 +107,7 @@ export default class ClientUser extends Component {
                                         </div>
                                         <div className="form-group">
                                             <div className="input-group">
-                                                <span className="input-group-addon">设备型号</span>
+                                                <span className="input-group-addon">型号</span>
                                                 <input type="text"
                                                        onChange={this.handleInputValueChange.bind(this, InputField.model)}
                                                        className="form-control"
@@ -172,7 +123,6 @@ export default class ClientUser extends Component {
                                                        placeholder="输入 IMEI"/>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group">
@@ -199,7 +149,7 @@ export default class ClientUser extends Component {
                                                 <input type="text"
                                                        onChange={this.handleInputValueChange.bind(this, InputField.appId)}
                                                        className="form-control"
-                                                       placeholder="输入应用 ID"/>
+                                                       placeholder="输入 应用 ID"/>
                                             </div>
                                         </div>
                                         <div className="form-group">
@@ -220,6 +170,15 @@ export default class ClientUser extends Component {
                                                        placeholder="输入应用版本信息"/>
                                             </div>
                                         </div>
+                                        <div className="form-group">
+                                            <div className="input-group">
+                                                <div className="input-group-addon">
+                                                    <i className="fa fa-calendar"/>&nbsp;日期
+                                                </div>
+                                                <input type="text" className="form-control pull-right"
+                                                       name="daterange"/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="col-md-12 text-center" style={{marginBottom: '15px'}}>
                                         <button type="submit" className="btn btn-primary"
@@ -234,6 +193,7 @@ export default class ClientUser extends Component {
                                             <tr>
                                                 <th>#</th>
                                                 <th>平台</th>
+                                                <th>时间</th>
                                                 <th>UID</th>
                                                 <th>AppID</th>
                                                 <th>应用版本号</th>
@@ -242,28 +202,6 @@ export default class ClientUser extends Component {
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {
-                                                users.map(function (item, index) {
-                                                    let order = index + 1;
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{order}</td>
-                                                            <td>{platformIcon(item.platform)}</td>
-                                                            <td>{item.uid}</td>
-                                                            <td>{item.appId}</td>
-                                                            <td>{item.version}</td>
-                                                            <td>{item.versionString}</td>
-                                                            <td>
-                                                                <button className="btn btn-success btn-xs"
-                                                                        onClick={userDetail.bind(this, item)}
-                                                                        style={{width: '50px'}}>
-                                                                    <i className="fa fa-info-circle"/>&nbsp;详细
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })
-                                            }
                                             </tbody>
                                         </table>
                                     </div>
@@ -277,14 +215,15 @@ export default class ClientUser extends Component {
     }
 }
 
-ClientUser.propTypes = {
-    users: PropTypes.array.isRequired,
+CrashAnalyze.propTypes = {
+    files: PropTypes.array.isRequired,
+    file: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-    const { users } = state.clientUser;
-    return {users};
+    const { files, file } = state.crashFile;
+    return {files, file};
 }
 
-export default connect(mapStateToProps)(ClientUser)
+export default connect(mapStateToProps)(CrashAnalyze)

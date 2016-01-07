@@ -10,6 +10,7 @@ import {
     ClientUser,
     LogFile,
     Control,
+    CrashAnalyze,
     NotFound
 } from 'containers';
 
@@ -36,6 +37,7 @@ export default function routes(store) {
                 <Route path="/app/:id/user" component={ClientUser}/>
                 <Route path="/app/:id/file" component={LogFile}/>
                 <Route path="/app/:id/control" component={Control}/>
+                <Route path="/app/:id/crash" component={CrashAnalyze}/>
                 <Route path="*" component={NotFound}/>
             </Route>
         </Route>

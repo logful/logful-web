@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { fileSize } from '../helpers/common';
 
 export default class DirDetail extends Component {
 
@@ -49,9 +50,9 @@ export default class DirDetail extends Component {
                                             return (
                                                 <tr key={index}>
                                                     <td>{item.Dir}</td>
-                                                    <td>{item.All}</td>
-                                                    <td>{item.Used}</td>
-                                                    <td>{item.Free}</td>
+                                                    <td>{fileSize(item.All)}</td>
+                                                    <td>{fileSize(item.Used)}</td>
+                                                    <td>{fileSize(item.Free)}</td>
                                                 </tr>
                                             );
                                         })
@@ -74,7 +75,7 @@ export default class DirDetail extends Component {
                                             return (
                                                 <tr key={index}>
                                                     <td>{item.Id}</td>
-                                                    <td>{item.Size}</td>
+                                                    <td>{fileSize(item.Size)}</td>
                                                     <td>{item.FileCount}</td>
                                                     <td>{item.DeleteCount}</td>
                                                 </tr>
@@ -90,7 +91,6 @@ export default class DirDetail extends Component {
             );
         }
     }
-
 }
 
 DirDetail.propTypes = {

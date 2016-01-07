@@ -1,17 +1,22 @@
+import 'whatwg-fetch';
 import React, { Component } from 'react';
+import * as URLHelper from '../../helpers/urls';
+import { API_URI, InputField } from '../../constants';
 
 export default class CreateApp extends Component {
 
     constructor(props) {
         super(props);
-        this.cancelCreateApp = this.cancelCreateApp.bind(this);
-        this.confirmCreateApp = this.confirmCreateApp.bind(this);
         this.state = {
             name: {
                 error: false,
                 message: null
-            }
+            },
+            form: {}
         };
+        this.cancelCreateApp = this.cancelCreateApp.bind(this);
+        this.confirmCreateApp = this.confirmCreateApp.bind(this);
+        this.handleInputValueChange = this.handleInputValueChange.bind(this);
     }
 
     cancelCreateApp(event) {
@@ -19,16 +24,52 @@ export default class CreateApp extends Component {
         this.props.history.pushState({}, '/');
     }
 
+    handleInputValueChange(field, event) {
+        event.preventDefault();
+        if (this.state.name.error) {
+            this.setState({
+                name: {
+                    error: false,
+                    message: null
+                }
+            });
+        }
+        this.state.form[field] = event.target.value;
+    }
+
     confirmCreateApp(event) {
         event.preventDefault();
-        // TODO
-        this.setState({
-            name: {
-                error: true,
-                message: '名称必须填写'
-            }
-        });
-        //this.props.history.pushState({}, '/');
+        const self = this;
+        if (!this.state.form.name) {
+            this.setState({
+                name: {
+                    error: true,
+                    message: '名称必须填写'
+                }
+            });
+        }
+        else {
+            fetch(URLHelper.formatUrl(API_URI.app), {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(self.state.form)
+            }).then(function (response) {
+                if (response.status == 201) {
+                    self.props.history.pushState({}, '/');
+                }
+                else {
+                    let error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            }).catch(function (error) {
+                // TODO
+                console.log('crate failed', error);
+            });
+        }
     }
 
     formGroupClassName(error) {
@@ -47,13 +88,16 @@ export default class CreateApp extends Component {
                             <div className="box-body">
                                 <div className={this.formGroupClassName(this.state.name.error)}>
                                     <label>新应用名称</label>
-                                    <input type="email" className="form-control" id="exampleInputEmail1"
+                                    <input type="text" className="form-control"
+                                           onChange={this.handleInputValueChange.bind(this, InputField.name)}
                                            placeholder="输入应用名称"/>
                                     <span className="text-red">{this.state.name.message}</span>
                                 </div>
                                 <div className="form-group">
                                     <label>应用描述</label>
-                                    <textarea className="form-control" rows="3" placeholder="应用描述信息 ..."/>
+                                    <textarea className="form-control" rows="3"
+                                              onChange={this.handleInputValueChange.bind(this, InputField.description)}
+                                              placeholder="应用描述信息 ..."/>
                                 </div>
                             </div>
                             <div className="box-footer">

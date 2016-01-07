@@ -5,7 +5,7 @@ import { appSidebar } from '../../action/layout';
 import { fetchFiles, fetchFile, clearFiles, clearFile } from '../../action/logFile';
 import { Select } from 'react-select';
 import { formatNow, formatUnix } from '../../helpers/datetime';
-import { levelToString, levelSpanClass, fileSize } from '../../helpers/common';
+import { levelToString, levelSpanClass, fileSize, platformIcon } from '../../helpers/common';
 
 export default class LogFile extends Component {
 
@@ -85,44 +85,49 @@ export default class LogFile extends Component {
             <div>
                 <div className="box box-primary">
                     <div className="box-header with-border">
-                        <h3 className="box-title">日志文件检索</h3>
+                        <h3 className="box-title">检索日志文件</h3>
                     </div>
                     <div className="box-body">
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>UID</label>
-                                    <input type="text" onChange={this.handleUidChange} className="form-control"
-                                           placeholder="输入用户 UID"/>
+                                    <div className="input-group">
+                                        <span className="input-group-addon">UID</span>
+                                        <input type="text" onChange={this.handleUidChange} className="form-control"
+                                               placeholder="输入用户 UID"/>
+                                    </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>应用 ID</label>
-                                    <input type="text" onChange={this.handleAppIdChange} className="form-control"
-                                           placeholder="输入应用 ID"/>
+                                    <div className="input-group">
+                                        <span className="input-group-addon">应用 ID</span>
+                                        <input type="text" onChange={this.handleAppIdChange} className="form-control"
+                                               placeholder="输入应用 ID"/>
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>日期</label>
                                     <div className="input-group">
                                         <div className="input-group-addon">
-                                            <i className="fa fa-calendar"/>
+                                            <i className="fa fa-calendar"/>&nbsp;日期
                                         </div>
                                         <input type="text" className="form-control pull-right" name="daterange"/>
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>级别</label>
-                                    <select name="level" className="form-control select2" style={{width: '100%'}}>
-                                        <option value="0">ALL</option>
-                                        <option value="1">VERBOSE</option>
-                                        <option value="2">DEBUG</option>
-                                        <option value="3">INFO</option>
-                                        <option value="4">WARN</option>
-                                        <option value="5">ERROR</option>
-                                        <option value="6">EXCEPTION</option>
-                                        <option value="7">FATAL</option>
-                                    </select>
+                                    <div className="input-group">
+                                        <span className="input-group-addon">级别</span>
+                                        <select name="level" className="form-control select2" style={{width: '100%', display:'none'}}>
+                                            <option value="0">ALL</option>
+                                            <option value="1">VERBOSE</option>
+                                            <option value="2">DEBUG</option>
+                                            <option value="3">INFO</option>
+                                            <option value="4">WARN</option>
+                                            <option value="5">ERROR</option>
+                                            <option value="6">EXCEPTION</option>
+                                            <option value="7">FATAL</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-md-12 text-center" style={{marginBottom: '15px'}}>
@@ -137,6 +142,7 @@ export default class LogFile extends Component {
                                     <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>平台</th>
                                         <th>UID</th>
                                         <th>AppID</th>
                                         <th>日期</th>
@@ -156,6 +162,7 @@ export default class LogFile extends Component {
                                             return (
                                                 <tr key={index}>
                                                     <td>{order}</td>
+                                                    <td>{platformIcon(item.platform)}</td>
                                                     <td>{item.uid}</td>
                                                     <td>{item.appId}</td>
                                                     <td>{dateString}</td>

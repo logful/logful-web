@@ -8,4 +8,5 @@ export { default as AppInfo } from './App/AppInfo';
 export { default as ClientUser } from './App/ClientUser';
 export { default as LogFile } from './App/LogFile';
 export { default as Control } from './App/Control';
+export { default as CrashAnalyze } from './App/CrashAnalyze';
 export { default as NotFound } from './NotFound/NotFound';

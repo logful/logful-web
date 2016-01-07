@@ -1,3 +1,4 @@
+import React from 'react';
 var fileSizeLib = require('filesize');
 
 export function levelToString(level) {
@@ -44,4 +45,15 @@ export function levelSpanClass(level) {
 
 export function fileSize(size) {
     return fileSizeLib(size);
+}
+
+export function platformIcon(platform) {
+    switch (platform) {
+        case 1:
+            return <i className="fa fa-android"/>;
+        case 2:
+            return <i className="fa fa-apple"/>;
+        default:
+            return <i/>
+    }
 }

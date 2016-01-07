@@ -141,7 +141,7 @@ export default class AppInfo extends Component {
                         </div>
                     </div>
                     {/* Confirm delete app dialog */}
-                    <div id="confirm-delete-modal" className="modal" role="dialog">
+                    <div id="confirm-delete-modal" className="modal modal-danger" role="dialog">
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
@@ -154,10 +154,10 @@ export default class AppInfo extends Component {
                                     <p>确定要删除应用吗?</p>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-default pull-left" data-dismiss="modal">
+                                    <button type="button" className="btn btn-outline pull-left" data-dismiss="modal">
                                         取消
                                     </button>
-                                    <button type="button" className="btn btn-primary"
+                                    <button type="button" className="btn btn-outline"
                                             onClick={this.confirmDeleteApp.bind(this)}>确认
                                     </button>
                                 </div>

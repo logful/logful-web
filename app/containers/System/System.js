@@ -88,8 +88,8 @@ export default class System extends Component {
                                                 <td>
                                                     <button className="btn btn-info btn-xs"
                                                             onClick={nodeClick.bind(this, param)}
-                                                            style={{width: '55px'}}>
-                                                        <i className="fa fa-info-circle"/>&nbsp;&nbsp;详细
+                                                            style={{width: '50px'}}>
+                                                        <i className="fa fa-info-circle"/>&nbsp;详细
                                                     </button>
                                                 </td>
                                             </tr>

@@ -13,21 +13,26 @@ export function appMenuData(id) {
                 name: '应用信息',
                 icon: 'fa-info-circle',
                 route: '/app/' + id + '/info'
-            },
-            {
+            }, {
                 name: '用户管理',
                 icon: 'fa-user',
                 route: '/app/' + id + '/user'
-            },
-            {
-                name: '文件查看',
-                icon: 'fa-book',
+            }, {
+                name: '日志文件',
+                icon: 'fa-file',
                 route: '/app/' + id + '/file'
-            },
-            {
+            }, {
+                name: '崩溃分析',
+                icon: 'fa-bug',
+                route: '/app/' + id + '/crash'
+            }, {
                 name: '应用控制',
                 icon: 'fa-cloud',
                 route: '/app/' + id + '/control'
+            }, {
+                name: '返回首页',
+                icon: 'fa-angle-double-left',
+                route: '/'
             }
         ]
     };
