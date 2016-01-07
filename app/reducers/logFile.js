@@ -7,8 +7,8 @@ import createReducer from '../utils/createReducer';
 const initialState = {
     files: [],
     file: {
-        meta: {},
-        lines: []
+        title: '',
+        lines: ''
     }
 };
 

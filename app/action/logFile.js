@@ -7,6 +7,7 @@ import {
     UPDATE_LOG_FILE_LIST,
     UPDATE_LOG_FILE_ITEM
 } from '../constants';
+import { logFilename } from '../helpers/common';
 
 export function fetchFiles(option) {
     let url = URLHelper.formatUrl(API_URI.logFile, option);
@@ -30,7 +31,7 @@ export function fetchFile(option) {
                 .then(res => dispatch({
                     type: UPDATE_LOG_FILE_ITEM,
                     file: {
-                        meta: option,
+                        title: '日志文件查看',
                         lines: res
                     }
                 }))
@@ -47,8 +48,8 @@ export function clearFiles(option) {
 
 export function clearFile(option) {
     let file = {
-        meta: {},
-        lines: []
+        title: '',
+        lines: ''
     };
     return dispatch => {
         dispatch({type: UPDATE_LOG_FILE_ITEM, file: file});

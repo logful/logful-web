@@ -1,5 +1,6 @@
 import React from 'react';
 var fileSizeLib = require('filesize');
+import { formatNow, formatUnix } from '../helpers/datetime';
 
 export function levelToString(level) {
     switch (level) {
@@ -56,4 +57,11 @@ export function platformIcon(platform) {
         default:
             return <i/>
     }
+}
+
+export function logFilename(meta) {
+    return meta.loggerName + '-'
+        + formatUnix(meta.date / 1000, 'YYYYMMDD') + '-'
+        + levelToString(meta.level) + '-'
+        + meta.fragment;
 }

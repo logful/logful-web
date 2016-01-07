@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { appSidebar } from '../../action/layout';
+import FileViewer from '../../components/FileViewer';
 import { fileSize, platformIcon } from '../../helpers/common';
-import { fetchCrashFiles, fetchCrashFile } from '../../action/crashFile';
+import { formatUnix } from '../../helpers/datetime';
+import { fetchCrashFiles, fetchCrashFile, clearCrashFiles, clearCrashFile } from '../../action/crashFile';
 import { InputField } from '../../constants';
 
 export default class CrashAnalyze extends Component {
@@ -10,12 +12,15 @@ export default class CrashAnalyze extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isViewerOpen: false,
             filter: {
                 platform: 0
             }
         };
         this.handleInputValueChange = this.handleInputValueChange.bind(this);
         this.performSearch = this.performSearch.bind(this);
+        this.viewFileContent = this.viewFileContent.bind(this);
+        this.closeFileViewer = this.closeFileViewer.bind(this);
     }
 
     componentDidMount() {
@@ -42,9 +47,28 @@ export default class CrashAnalyze extends Component {
         });
     }
 
+    componentWillUnmount() {
+        this.props.dispatch(clearCrashFiles());
+        this.props.dispatch(clearCrashFile());
+    }
+
     handleInputValueChange(field, event) {
         event.preventDefault();
         this.state.filter[field] = event.target.value;
+    }
+
+    viewFileContent(params) {
+        this.setState({
+            isViewerOpen: true
+        });
+        this.props.dispatch(fetchCrashFile(params));
+    }
+
+    closeFileViewer() {
+        this.setState({
+            isViewerOpen: false
+        });
+        this.props.dispatch(clearCrashFile());
     }
 
     performSearch(event) {
@@ -54,8 +78,11 @@ export default class CrashAnalyze extends Component {
     }
 
     render() {
+        const { files, file } = this.props;
+        const viewFile = this.viewFileContent;
         return (
             <div>
+                <FileViewer isOpen={this.state.isViewerOpen} file={file} onRequestClose={this.closeFileViewer}/>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="box box-primary">
@@ -202,6 +229,34 @@ export default class CrashAnalyze extends Component {
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            {
+                                                files.map(function (item, index) {
+                                                    let order = index + 1;
+                                                    let dateString = formatUnix(item.date / 1000, 'YYYY/MM/DD HH:mm:ss.SSS');
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{order}</td>
+                                                            <td>{platformIcon(item.platform)}</td>
+                                                            <td>{dateString}</td>
+                                                            <td>{item.uid}</td>
+                                                            <td>{item.appId}</td>
+                                                            <td>{item.version}</td>
+                                                            <td>{item.versionString}</td>
+                                                            <td>
+                                                                <button className="btn btn-primary btn-xs"
+                                                                        onClick={viewFile.bind(this, item)}
+                                                                        style={{width: '50px', marginRight: '10px'}}>
+                                                                    <i className="fa fa-eye"/>&nbsp;查看
+                                                                </button>
+                                                                <button className="btn btn-success btn-xs"
+                                                                        style={{width: '50px'}}>
+                                                                    <i className="fa fa-download"/>&nbsp;下载
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
                                             </tbody>
                                         </table>
                                     </div>

@@ -22,13 +22,35 @@ export function fetchCrashFiles(option) {
 }
 
 export function fetchCrashFile(option) {
-
+    if (option.id) {
+        let url = URLHelper.formatUrl(API_URI.crashFile) + '/' + option.id;
+        return dispatch => {
+            fetch(url)
+                .then(parseLogFileResponse)
+                .then(res => dispatch({
+                    type: UPDATE_CRASH_FILE_ITEM,
+                    file: {
+                        title: '崩溃日志文件查看',
+                        lines: res
+                    }
+                }))
+                .catch(error => handleActionError(dispatch, error, UPDATE_CRASH_FILE_ITEM))
+        };
+    }
 }
 
 export function clearCrashFiles(option) {
-
+    return dispatch => {
+        dispatch({type: UPDATE_CRASH_FILE_LIST, files: []});
+    };
 }
 
 export function clearCrashFile(option) {
-
+    let file = {
+        title: '',
+        lines: ''
+    };
+    return dispatch => {
+        dispatch({type: UPDATE_CRASH_FILE_ITEM, file: file});
+    };
 }

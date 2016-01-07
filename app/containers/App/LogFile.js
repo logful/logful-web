@@ -1,26 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import FileContent from '../../components/FileContent';
+import FileViewer from '../../components/FileViewer';
 import { appSidebar } from '../../action/layout';
 import { fetchFiles, fetchFile, clearFiles, clearFile } from '../../action/logFile';
 import { Select } from 'react-select';
 import { formatNow, formatUnix } from '../../helpers/datetime';
 import { levelToString, levelSpanClass, fileSize, platformIcon } from '../../helpers/common';
+import { InputField } from '../../constants';
 
 export default class LogFile extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            level: 0,
-            startDate: formatNow('YYYY/MM/DD'),
-            endDate: formatNow('YYYY/MM/DD')
+            isViewerOpen: false,
+            filter: {
+                level: 0,
+                startDate: formatNow('YYYY/MM/DD'),
+                endDate: formatNow('YYYY/MM/DD')
+            }
         };
+        this.handleInputValueChange = this.handleInputValueChange.bind(this);
         this.performSearch = this.performSearch.bind(this);
-        this.handleUidChange = this.handleUidChange.bind(this);
-        this.handleAppIdChange = this.handleAppIdChange.bind(this);
         this.viewFileContent = this.viewFileContent.bind(this);
         this.downloadFile = this.downloadFile.bind(this);
+        this.closeFileViewer = this.closeFileViewer.bind(this);
     }
 
     componentDidMount() {
@@ -30,19 +34,15 @@ export default class LogFile extends Component {
         }));
         const self = this;
         jQuery('.select2').select2().on('change', function (e) {
-            self.setState({
-                level: e.target.value
-            });
+            self.state.filter['level'] = e.target.value;
         });
         jQuery('input[name="daterange"]').daterangepicker({
             locale: {
                 format: 'YYYY/MM/DD'
             }
         }).on('apply.daterangepicker', function (event, picker) {
-            self.setState({
-                startDate: picker.startDate.format('YYYY/MM/DD'),
-                endDate: picker.endDate.format('YYYY/MM/DD')
-            });
+            self.state.filter['startDate'] = picker.startDate.format('YYYY/MM/DD');
+            self.state.filter['endDate'] = picker.endDate.format('YYYY/MM/DD');
         });
     }
 
@@ -51,16 +51,9 @@ export default class LogFile extends Component {
         this.props.dispatch(clearFile());
     }
 
-    handleUidChange(event) {
-        this.setState({
-            uid: event.target.value
-        });
-    }
-
-    handleAppIdChange(event) {
-        this.setState({
-            appId: event.target.value
-        });
+    handleInputValueChange(field, event) {
+        event.preventDefault();
+        this.state.filter[field] = event.target.value;
     }
 
     performSearch(event) {
@@ -70,11 +63,21 @@ export default class LogFile extends Component {
     }
 
     viewFileContent(params) {
+        this.setState({
+            isViewerOpen: true
+        });
         this.props.dispatch(fetchFile(params));
     }
 
     downloadFile(param) {
         // TODO
+    }
+
+    closeFileViewer() {
+        this.setState({
+            isViewerOpen: false
+        });
+        this.props.dispatch(clearFile());
     }
 
     render() {
@@ -83,7 +86,9 @@ export default class LogFile extends Component {
         const downloadFile = this.downloadFile;
         return (
             <div>
-                <FileContent file={file}/>
+                <FileViewer isOpen={this.state.isViewerOpen} file={file} onRequestClose={this.closeFileViewer}>
+                    test
+                </FileViewer>
                 <div className="box box-primary">
                     <div className="box-header with-border">
                         <h3 className="box-title">检索日志文件</h3>
@@ -94,14 +99,18 @@ export default class LogFile extends Component {
                                 <div className="form-group">
                                     <div className="input-group">
                                         <span className="input-group-addon">UID</span>
-                                        <input type="text" onChange={this.handleUidChange} className="form-control"
+                                        <input type="text"
+                                               onChange={this.handleInputValueChange.bind(this, InputField.uid)}
+                                               className="form-control"
                                                placeholder="输入用户 UID"/>
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <div className="input-group">
                                         <span className="input-group-addon">应用 ID</span>
-                                        <input type="text" onChange={this.handleAppIdChange} className="form-control"
+                                        <input type="text"
+                                               onChange={this.handleInputValueChange.bind(this, InputField.appId)}
+                                               className="form-control"
                                                placeholder="输入应用 ID"/>
                                     </div>
                                 </div>
@@ -118,7 +127,8 @@ export default class LogFile extends Component {
                                 <div className="form-group">
                                     <div className="input-group">
                                         <span className="input-group-addon">级别</span>
-                                        <select name="level" className="form-control select2" style={{width: '100%', display:'none'}}>
+                                        <select name="level" className="form-control select2"
+                                                style={{width: '100%', display:'none'}}>
                                             <option value="0">ALL</option>
                                             <option value="1">VERBOSE</option>
                                             <option value="2">DEBUG</option>
