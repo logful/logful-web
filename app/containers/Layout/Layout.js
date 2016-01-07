@@ -13,7 +13,7 @@ import '../../assets/plugins/iCheck/all.css';
 import '../../assets/plugins/timepicker/bootstrap-timepicker.min.css';
 import '../../assets/plugins/select2/select2.min.css';
 import '../../assets/admin-lte/css/AdminLTE.min.css';
-import '../../assets/css/logful-style.css'
+//import '../../assets/css/logful-style.css'
 
 import '../../assets/plugins/jQuery/jQuery-2.1.4.min';
 import '../../assets/bootstrap/js/bootstrap.min';

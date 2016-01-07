@@ -24,6 +24,7 @@ export function parseLogFileResponse(response) {
     let isOk = response.ok;
     return response.text()
         .then(body => {
+            /*
             const result = '[' + String(body.trim()).replaceAll('\n', ',').s + ']';
             try {
                 body = JSON.parse(result);
@@ -31,6 +32,7 @@ export function parseLogFileResponse(response) {
             catch (error) {
                 if (isOk) isOk = false;
             }
+            */
 
             if (isOk) {
                 return body;

@@ -83,6 +83,7 @@ export default class LogFile extends Component {
         const downloadFile = this.downloadFile;
         return (
             <div>
+                <FileContent file={file}/>
                 <div className="box box-primary">
                     <div className="box-header with-border">
                         <h3 className="box-title">检索日志文件</h3>
@@ -192,7 +193,6 @@ export default class LogFile extends Component {
                         </div>
                     </div>
                 </div>
-                <FileContent file={file}/>
             </div>
         );
     }

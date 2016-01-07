@@ -24,6 +24,7 @@
     "babel-preset-stage-0": "^6.3.13",
     "bootstrap": "^3.3.6",
     "bootstrap-daterangepicker": "^2.1.17",
+    "codemirror": "^5.10.0",
     "css-loader": "^0.23.1",
     "datatables": "^1.10.9",
     "extract-text-webpack-plugin": "^0.9.1",
