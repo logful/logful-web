@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { appSidebar } from '../../action/layout';
+import { fetchApp } from '../../action/application';
 import FileViewer from '../../components/FileViewer';
 import { fileSize, platformIcon } from '../../helpers/common';
 import { formatUnix } from '../../helpers/datetime';
@@ -43,8 +44,17 @@ export default class CrashAnalyze extends Component {
                 format: 'YYYY/MM/DD'
             }
         }).on('apply.daterangepicker', function (event, picker) {
-            jQuery(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+            const startDate = picker.startDate.format('YYYY/MM/DD');
+            const endDate = picker.endDate.format('YYYY/MM/DD');
+            jQuery(this).val(startDate + ' - ' + endDate);
+            self.state.filter['startDate'] = startDate;
+            self.state.filter['endDate'] = endDate;
         });
+        if (Object.keys(this.props.app).length == 0) {
+            this.props.dispatch(fetchApp({
+                id: self.props.params.id
+            }));
+        }
     }
 
     componentWillUnmount() {
@@ -73,8 +83,11 @@ export default class CrashAnalyze extends Component {
 
     performSearch(event) {
         event.preventDefault();
-        const option = this.state.filter;
-        this.props.dispatch(fetchCrashFiles(option));
+        if (Object.keys(this.props.app).length != 0) {
+            this.state.filter['clientId'] = this.props.app.clientId;
+            const option = this.state.filter;
+            this.props.dispatch(fetchCrashFiles(option));
+        }
     }
 
     render() {
@@ -176,7 +189,7 @@ export default class CrashAnalyze extends Component {
                                                 <input type="text"
                                                        onChange={this.handleInputValueChange.bind(this, InputField.appId)}
                                                        className="form-control"
-                                                       placeholder="输入 应用 ID"/>
+                                                       placeholder="输入应用 ID"/>
                                             </div>
                                         </div>
                                         <div className="form-group">
@@ -271,14 +284,16 @@ export default class CrashAnalyze extends Component {
 }
 
 CrashAnalyze.propTypes = {
+    app: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     file: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
+    const { app } = state.application;
     const { files, file } = state.crashFile;
-    return {files, file};
+    return {app, files, file};
 }
 
 export default connect(mapStateToProps)(CrashAnalyze)

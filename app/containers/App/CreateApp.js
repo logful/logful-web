@@ -50,7 +50,7 @@ export default class CreateApp extends Component {
         }
         else {
             fetch(URLHelper.formatUrl(API_URI.app), {
-                method: 'post',
+                method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'

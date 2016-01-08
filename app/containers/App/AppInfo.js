@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchApp } from  '../../action/application';
+import { fetchApp, updateApp, deleteApp } from  '../../action/application';
 import { appSidebar } from '../../action/layout';
 
 export default class AppInfo extends Component {
@@ -8,6 +8,7 @@ export default class AppInfo extends Component {
     constructor(props) {
         super(props);
         this.modalHideCallback = this.modalHideCallback.bind(this);
+        this.updateApp = this.updateApp.bind(this);
     }
 
     componentDidMount() {
@@ -26,11 +27,28 @@ export default class AppInfo extends Component {
         jQuery('#confirm-delete-modal').modal('show');
     }
 
+    updateApp(event) {
+        event.preventDefault();
+        // TODO
+    }
+
     confirmDeleteApp(event) {
         event.preventDefault();
-        var modal = jQuery('#confirm-delete-modal');
-        modal.on('hidden.bs.modal', this.modalHideCallback);
-        modal.modal('hide');
+        const self = this;
+        let modal = jQuery('#confirm-delete-modal');
+        if (Object.keys(this.props.app).length != 0) {
+            deleteApp({
+                id: this.props.app.id
+            }, function (success, error) {
+                if (success) {
+                    modal.modal('hide');
+                    self.props.history.pushState({}, '/');
+                }
+            });
+        }
+        //var modal = jQuery('#confirm-delete-modal');
+        //modal.on('hidden.bs.modal', this.modalHideCallback);
+        //modal.modal('hide');
     }
 
     modalHideCallback() {

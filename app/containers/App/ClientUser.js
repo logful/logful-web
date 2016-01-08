@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { appSidebar } from '../../action/layout';
+import { fetchApp } from '../../action/application';
 import { fetchUsers, clearUsers } from '../../action/clientUser';
 import { platformIcon } from '../../helpers/common';
 import { InputField } from '../../constants';
@@ -33,6 +34,11 @@ export default class ClientUser extends Component {
                 }
             });
         });
+        if (Object.keys(this.props.app).length == 0) {
+            this.props.dispatch(fetchApp({
+                id: self.props.params.id
+            }));
+        }
     }
 
     componentWillUnmount() {
@@ -46,8 +52,11 @@ export default class ClientUser extends Component {
 
     performSearch(event) {
         event.preventDefault();
-        const option = this.state.filter;
-        this.props.dispatch(fetchUsers(option));
+        if (Object.keys(this.props.app).length != 0) {
+            this.state.filter['clientId'] = this.props.app.clientId;
+            const option = this.state.filter;
+            this.props.dispatch(fetchUsers(option));
+        }
     }
 
     showUserDetail(data) {
@@ -278,13 +287,15 @@ export default class ClientUser extends Component {
 }
 
 ClientUser.propTypes = {
+    app: PropTypes.object.isRequired,
     users: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
+    const { app } = state.application;
     const { users } = state.clientUser;
-    return {users};
+    return {app, users};
 }
 
 export default connect(mapStateToProps)(ClientUser)

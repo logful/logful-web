@@ -62,6 +62,7 @@ export const API_URI = {
     logFile: '/api/log/file',
     clientUser: '/api/user',
     crashFile: '/api/crash/file',
+    push: '/api/push',
     weed: {
         dirStatus: '/api/weed/dir/status',
         volumeStatus: '/api/weed/volume/status',

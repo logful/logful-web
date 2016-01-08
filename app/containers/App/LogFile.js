@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import FileViewer from '../../components/FileViewer';
 import { appSidebar } from '../../action/layout';
+import { fetchApp } from '../../action/application';
 import { fetchFiles, fetchFile, clearFiles, clearFile } from '../../action/logFile';
 import { Select } from 'react-select';
 import { formatNow, formatUnix } from '../../helpers/datetime';
@@ -44,6 +45,11 @@ export default class LogFile extends Component {
             self.state.filter['startDate'] = picker.startDate.format('YYYY/MM/DD');
             self.state.filter['endDate'] = picker.endDate.format('YYYY/MM/DD');
         });
+        if (Object.keys(this.props.app).length == 0) {
+            this.props.dispatch(fetchApp({
+                id: self.props.params.id
+            }));
+        }
     }
 
     componentWillUnmount() {
@@ -58,8 +64,11 @@ export default class LogFile extends Component {
 
     performSearch(event) {
         event.preventDefault();
-        const option = this.state;
-        this.props.dispatch(fetchFiles(option));
+        if (Object.keys(this.props.app).length != 0) {
+            this.state.filter['clientId'] = this.props.app.clientId;
+            const option = this.state.filter;
+            this.props.dispatch(fetchFiles(option));
+        }
     }
 
     viewFileContent(params) {
@@ -87,7 +96,6 @@ export default class LogFile extends Component {
         return (
             <div>
                 <FileViewer isOpen={this.state.isViewerOpen} file={file} onRequestClose={this.closeFileViewer}>
-                    test
                 </FileViewer>
                 <div className="box box-primary">
                     <div className="box-header with-border">
@@ -209,18 +217,16 @@ export default class LogFile extends Component {
 }
 
 LogFile.propTypes = {
+    app: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     file: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-    const files = state.logFile.files;
-    const file = state.logFile.file;
-    if (files && file) {
-        return {files, file};
-    }
-    return {};
+    const { app } = state.application;
+    const { files, file } = state.logFile;
+    return {app, files, file};
 }
 
 export default connect(mapStateToProps)(LogFile)

@@ -7,7 +7,6 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/solarized.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import '../assets/css/logful-style.css';
 
 var CodeMirror = require('codemirror/lib/codemirror');
 import 'codemirror/addon/dialog/dialog';

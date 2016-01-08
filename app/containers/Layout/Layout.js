@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Sidebar from '../../components/Sidebar';
 import PageTitle from '../../components/PageTitle';
+var Toastr = require('toastr');
 
 import '../../assets/bootstrap/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -12,8 +13,12 @@ import '../../assets/admin-lte/css/skins/_all-skins.min.css';
 import '../../assets/plugins/iCheck/all.css';
 import '../../assets/plugins/timepicker/bootstrap-timepicker.min.css';
 import '../../assets/plugins/select2/select2.min.css';
+import '../../assets/plugins/ionslider/ion.rangeSlider.css';
+import '../../assets/plugins/ionslider/ion.rangeSlider.skinNice.css';
+import 'bootstrap-tagsinput/dist/bootstrap-tagsinput.css';
+import 'bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css';
 import '../../assets/admin-lte/css/AdminLTE.min.css';
-//import '../../assets/css/logful-style.css'
+import '../../assets/css/logful-style.css';
 
 import '../../assets/plugins/jQuery/jQuery-2.1.4.min';
 import '../../assets/bootstrap/js/bootstrap.min';
@@ -28,6 +33,8 @@ import '../../assets/plugins/daterangepicker/moment.min';
 import '../../assets/plugins/daterangepicker/daterangepicker';
 
 import '../../assets/admin-lte/js/app.min';
+import '../../assets/plugins/ionslider/ion.rangeSlider.min';
+import 'bootstrap-tagsinput/dist/bootstrap-tagsinput.min';
 
 export default class Layout extends Component {
 
@@ -77,10 +84,9 @@ export default class Layout extends Component {
                 {/* Footer */}
                 <footer className="main-footer">
                     <div className="pull-right hidden-xs">
-                        <b>Version</b> 2.3.0
+                        <b>Version</b> 0.3.0
                     </div>
-                    <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong>
-                    All rights reserved.
+                    <strong>Copyright &copy; 2015-2016 Logful.</strong>
                 </footer>
             </div>
         );
