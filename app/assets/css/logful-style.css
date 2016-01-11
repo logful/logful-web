@@ -6,6 +6,15 @@
     height: 500px;
 }
 
+.CodeMirror-cursor {
+    display: none !important
+}
+
+.cm-attach-links {
+    cursor: pointer;
+    color: yellow;
+}
+
 .react-tagsinput {
     background-color: #fff;
     border: 1px solid #ccc;

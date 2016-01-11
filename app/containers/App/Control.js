@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import TagsInput from 'react-tagsinput';
 import { appSidebar } from '../../action/layout';
 import { pushData } from '../../action/control';
-var Switchery = require('switchery');
-
+import Toggle from 'react-toggle';
 import 'react-tagsinput/react-tagsinput';
 
 export default class Control extends Component {
@@ -12,9 +11,8 @@ export default class Control extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            switchOn: false,
             payload: {
-                on: false,
+                on: true,
                 interval: 60,
                 frequency: 60,
                 params: {
@@ -26,8 +24,9 @@ export default class Control extends Component {
             }
         };
         this.pushPayload = this.pushPayload.bind(this);
-        this.getuiCidTagsChange = this.getuiCidTagsChange.bind(this);
-        this.getuiAliasTagsChange = this.getuiAliasTagsChange.bind(this);
+        this.tagsValueChange = this.tagsValueChange.bind(this);
+        this.switchStateChange = this.switchStateChange.bind(this);
+        this.initRangeSlider = this.initRangeSlider.bind(this);
     }
 
     componentDidMount() {
@@ -36,20 +35,14 @@ export default class Control extends Component {
             id: params.id,
             active: 4
         }));
-        const self = this;
-        var elem = document.querySelector('.log-switch');
-        let logSwitch = new Switchery(elem, {
-            color: '#378CBE'
-        });
-        jQuery('.switchery').on('click', function () {
-            self.setState({
-                switchOn: elem.checked
-            });
-            self.state.payload.on = elem.checked;
-        });
+        this.initRangeSlider();
     }
 
     componentDidUpdate() {
+        this.initRangeSlider();
+    }
+
+    initRangeSlider() {
         const self = this;
         jQuery('#interval-range').ionRangeSlider({
             min: 60,
@@ -77,16 +70,18 @@ export default class Control extends Component {
         });
     }
 
-    getuiCidTagsChange(tags) {
-        // TODO check same
+    tagsValueChange(type, field, tags) {
+        var unique = tags.filter(function (elem, index, self) {
+            return index == self.indexOf(elem);
+        });
         let newState = this.state;
-        newState.payload.params.getui.clientIds = tags;
+        newState.payload.params[type][field] = unique;
         this.setState(newState);
     }
 
-    getuiAliasTagsChange(tags) {
+    switchStateChange(event) {
         let newState = this.state;
-        newState.payload.params.getui.alias = tags;
+        newState.payload.on = event.target.checked;
         this.setState(newState);
     }
 
@@ -94,27 +89,53 @@ export default class Control extends Component {
 
     }
 
+    customRenderInput(placeholder, props) {
+        let {onChange, value, ...other} = props;
+        return (
+            <input type='text' placeholder={placeholder} onChange={onChange} value={value} {...other} />
+        )
+    }
+
     pushPayload(event) {
         event.preventDefault();
-        pushData(this.state.payload, function (success, error) {
-            if (error) {
-                console.log(error);
-            }
-        });
+        const payload = this.state.payload;
+        let data = {};
+        data.on = payload.on;
+        data.interval = payload.interval;
+        data.frequency = payload.frequency;
+        data.timestamp = Math.round(Date.now() / 1000);
+
+        data.params = {};
+        if (payload.params.getui.clientIds.length != 0 ||
+            payload.params.getui.alias.length != 0) {
+            data.params.getui = payload.params.getui;
+        }
+
+        console.log('push-data', data);
+        if (!data.params.getui) {
+
+        }
+        else {
+            pushData(data, function (success, error) {
+                if (error) {
+                    console.log(error);
+                }
+            });
+        }
     }
 
     render() {
         let rangeView;
-        if (this.state.switchOn) {
+        if (this.state.payload.on) {
             rangeView =
                 <div>
                     <div className="form-group">
                         <label>开启时间</label>
-                        <input id="interval-range" type="text" name="range_5" value=""/>
+                        <input id="interval-range" type="text" value=""/>
                     </div>
                     <div className="form-group">
                         <label>上传频率</label>
-                        <input id="frequency-range" type="text" name="range_5" value=""/>
+                        <input id="frequency-range" type="text" value=""/>
                     </div>
                 </div>
         }
@@ -134,20 +155,29 @@ export default class Control extends Component {
                                 <h3 className="box-title">推送控制</h3>
                             </div>
                             <div className="box-body">
-                                <div className="form-group">
-                                    <label>CID 列表</label>
-                                    <TagsInput value={this.state.payload.params.getui.clientIds}
-                                               onChange={this.getuiCidTagsChange}/>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <label>个推推送</label>
+                                        <div className="form-group">
+                                            <TagsInput value={this.state.payload.params.getui.clientIds}
+                                                       renderInput={this.customRenderInput.bind(this, '输入 CID')}
+                                                       onChange={this.tagsValueChange.bind(this, 'getui', 'clientIds')}/>
+                                        </div>
+                                        <div className="form-group">
+                                            <TagsInput value={this.state.payload.params.getui.alias}
+                                                       renderInput={this.customRenderInput.bind(this, '输入别名')}
+                                                       onChange={this.tagsValueChange.bind(this, 'getui', 'alias')}/>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <Toggle
+                                                defaultChecked={this.state.payload.on}
+                                                onChange={this.switchStateChange}/>
+                                        </div>
+                                        {rangeView}
+                                    </div>
                                 </div>
-                                <div className="form-group">
-                                    <label>别名列表</label>
-                                    <TagsInput value={this.state.payload.params.getui.alias}
-                                               onChange={this.getuiAliasTagsChange}/>
-                                </div>
-                                <div className="form-group">
-                                    <input className="log-switch" type="checkbox" name="checkbox"/>
-                                </div>
-                                {rangeView}
                             </div>
                             <div className="box-footer">
                                 <button type="submit" onClick={this.pushPayload} className="btn btn-primary">推送</button>

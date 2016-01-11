@@ -234,10 +234,9 @@ export default class CrashAnalyze extends Component {
                                                 <th>#</th>
                                                 <th>平台</th>
                                                 <th>时间</th>
+                                                <th>类型</th>
                                                 <th>UID</th>
                                                 <th>AppID</th>
-                                                <th>应用版本号</th>
-                                                <th>应用版本信息</th>
                                                 <th>操作</th>
                                             </tr>
                                             </thead>
@@ -251,10 +250,9 @@ export default class CrashAnalyze extends Component {
                                                             <td>{order}</td>
                                                             <td>{platformIcon(item.platform)}</td>
                                                             <td>{dateString}</td>
+                                                            <td>{item.cause}</td>
                                                             <td>{item.uid}</td>
                                                             <td>{item.appId}</td>
-                                                            <td>{item.version}</td>
-                                                            <td>{item.versionString}</td>
                                                             <td>
                                                                 <button className="btn btn-primary btn-xs"
                                                                         onClick={viewFile.bind(this, item)}

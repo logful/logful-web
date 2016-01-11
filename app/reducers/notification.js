@@ -1,24 +1,17 @@
 import * as storage from '../persistence/storage';
 import {
-    LOGGED_IN ,
-    LOG_OUT
+    UPDATE_NOTIFICATION
 } from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-    error: null,
-    token: storage.get('token')
+    message: {}
 };
 
 const actionHandlers = {
-    LOGGED_IN: (state, action) => {
+    UPDATE_NOTIFICATION: (state, action) => {
         return Object.assign({}, state, {
-            token: action.token
-        })
-    },
-    LOG_OUT: (state, action) => {
-        return Object.assign({}, state, {
-            token: null
+            message: action.message
         })
     }
 };

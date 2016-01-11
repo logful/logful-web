@@ -23,7 +23,7 @@ module.exports = {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
             }, {
-                test: /\.(png|jpg)$/,
+                test: /\.(png|jpg|gif)$/,
                 loader: 'file-loader?name=images/[name].[ext]'
             }, {
                 test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,

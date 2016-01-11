@@ -12,13 +12,30 @@ import '../../assets/plugins/iCheck/icheck';
 
 export default class Login extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            remember: false
+        };
+        this.handleInputValueChange = this.handleInputValueChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
     componentDidMount() {
-        $(function () {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%'
-            });
+        let elem = jQuery('input');
+        const self = this;
+        elem.iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%'
+        });
+        elem.on('ifChecked', function (event) {
+            self.state.remember = true;
+        });
+        elem.on('ifUnchecked', function (event) {
+            self.state.remember = false;
         });
     }
 
@@ -26,10 +43,16 @@ export default class Login extends Component {
         document.body.classList.add('hold-transition', 'login-page');
     }
 
-    handleSubmit(event) {
-        // TODO
-        console.log(event);
+    handleInputValueChange(field, event) {
         event.preventDefault();
+        this.state[field] = event.target.value;
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        if (this.state.username && this.state.password) {
+            console.log(this.state);
+        }
     }
 
     render() {
@@ -43,11 +66,15 @@ export default class Login extends Component {
                     <p className="login-box-msg">Sign in to start your session</p>
                     <form action="" method="post" onSubmit={this.handleSubmit}>
                         <div className="form-group has-feedback">
-                            <input type="email" className="form-control" placeholder="Username"/>
+                            <input type="text"
+                                   onChange={this.handleInputValueChange.bind(this, 'username')}
+                                   className="form-control" placeholder="Username"/>
                             <span className="glyphicon glyphicon-envelope form-control-feedback"/>
                         </div>
                         <div className="form-group has-feedback">
-                            <input type="password" className="form-control" placeholder="Password"/>
+                            <input type="password"
+                                   onChange={this.handleInputValueChange.bind(this, 'password')}
+                                   className="form-control" placeholder="Password"/>
                             <span className="glyphicon glyphicon-lock form-control-feedback"/>
                         </div>
                         <div className="row">

@@ -1,9 +1,6 @@
 export const LOGGED_IN = 'LOGGED_IN';
 export const LOG_OUT = 'LOG_OUT';
 
-export const SHOW_ERROR = 'SHOW_ERROR';
-export const HIDE_ERROR = 'HIDE_ERROR';
-
 export const REFRESH_LAYOUT = 'REFRESH_LAYOUT';
 export const SIDEBAR_TYPE_MENU_ADMIN = 1;
 export const SIDEBAR_TYPE_MENU_APP = 2;
@@ -23,6 +20,8 @@ export const UPDATE_CLIENT_USER_LIST = 'UPDATE_CLIENT_USER_LIST';
 
 export const UPDATE_CRASH_FILE_LIST = 'UPDATE_CRASH_FILE_LIST';
 export const UPDATE_CRASH_FILE_ITEM = 'UPDATE_CRASH_FILE_ITEM';
+
+export const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION';
 
 export const ADMIN_MENU_DATA = {
     header: {name: '系统管理页'},
@@ -56,10 +55,12 @@ export const InputField = {
 };
 
 export const API_HOST = '127.0.0.1';
-export const API_PORT = '8100';
+export const API_PORT = '8800';
 export const API_URI = {
+    login: 'login',
     app: '/api/app',
     logFile: '/api/log/file',
+    attachment: '/api/log/attachment',
     clientUser: '/api/user',
     crashFile: '/api/crash/file',
     push: '/api/push',

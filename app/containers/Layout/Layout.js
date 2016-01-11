@@ -2,11 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Sidebar from '../../components/Sidebar';
 import PageTitle from '../../components/PageTitle';
-var Toastr = require('toastr');
+import { clearNotification } from '../../action/notification';
+var toastr = require('toastr');
 
 import '../../assets/bootstrap/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'ionicons/css/ionicons.min.css';
+import 'react-toggle/style.css';
+import 'toastr/build/toastr.min.css';
+import '../../assets/css/animate.css';
 import '../../assets/plugins/datatables/dataTables.bootstrap.css';
 import '../../assets/plugins/daterangepicker/daterangepicker.css'
 import '../../assets/admin-lte/css/skins/_all-skins.min.css';
@@ -15,8 +19,6 @@ import '../../assets/plugins/timepicker/bootstrap-timepicker.min.css';
 import '../../assets/plugins/select2/select2.min.css';
 import '../../assets/plugins/ionslider/ion.rangeSlider.css';
 import '../../assets/plugins/ionslider/ion.rangeSlider.skinNice.css';
-import 'bootstrap-tagsinput/dist/bootstrap-tagsinput.css';
-import 'bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css';
 import '../../assets/admin-lte/css/AdminLTE.min.css';
 import '../../assets/css/logful-style.css';
 
@@ -44,6 +46,23 @@ export default class Layout extends Component {
 
     componentWillMount() {
         document.body.classList.add('hold-transition', 'skin-blue', 'sidebar-mini');
+    }
+
+    componentDidMount() {
+        toastr.options.closeDuration = 300;
+        toastr.options.timeOut = 2000;
+    }
+
+    componentWillUnmount() {
+        this.state.mounted = false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { message } = nextProps;
+        if (Object.keys(message).length > 0) {
+            toastr.error(message.content, message.title);
+            this.props.dispatch(clearNotification());
+        }
     }
 
     render() {
@@ -95,15 +114,14 @@ export default class Layout extends Component {
 
 Layout.propTypes = {
     sidebar: PropTypes.object.isRequired,
+    message: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-    const sidebar = state.layout.sidebar;
-    if (sidebar) {
-        return {sidebar};
-    }
-    return {};
+    const { sidebar } = state.layout;
+    const { message } = state.notification;
+    return {sidebar, message};
 }
 
 export default connect(mapStateToProps)(Layout)

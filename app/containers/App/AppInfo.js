@@ -134,7 +134,7 @@ export default class AppInfo extends Component {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Master Key</td>
+                                            <td>Secret Key</td>
                                             <td>{app.clientSecret}</td>
                                             <td style={{textAlign: 'right'}}>
                                                 <button className="btn btn-box-tool">
