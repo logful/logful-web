@@ -1,5 +1,9 @@
 export function put(key, value) {
-    window.localStorage.setItem(key, value)
+    window.localStorage.setItem(key, value);
+    var date = new Date();
+    date.setTime(date.getTime() + (360 * 24 * 3600000));
+    var expires = 'expires=' + date.toUTCString();
+    document.cookie = 'access-token=' + value + '; ' + expires;
 }
 
 export function get(key) {

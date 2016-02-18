@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { adminSidebar } from '../../action/layout';
+import { adminSidebar, refreshPage } from '../../action/layout';
 import { fetchWeedFSDirs, fetchWeedFSVolumes, fetchWeedFSDiskStatus, clearDirDetailData } from '../../action/system';
 import DirDetail from '../../components/DirDetail';
 
@@ -17,6 +17,9 @@ export default class System extends Component {
             active: 1
         }));
         this.props.dispatch(fetchWeedFSDirs());
+        this.props.dispatch(refreshPage({
+            title: ''
+        }));
     }
 
     weedDirDetailClick(param, event) {

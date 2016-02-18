@@ -1,15 +1,15 @@
-import {API_HOST, API_PORT} from '../constants';
+import { API_BASE_URL } from '../constants';
 
 export function formatUrl(uri, params) {
     if (!params) {
-        return 'http://' + API_HOST + ':' + API_PORT + uri;
+        return API_BASE_URL + uri;
     }
     else {
         if (Object.keys(params).length == 0) {
-            return 'http://' + API_HOST + ':' + API_PORT + uri;
+            return API_BASE_URL + uri;
         }
         else {
-            return 'http://' + API_HOST + ':' + API_PORT + uri + '?' + jQuery.param(params);
+            return API_BASE_URL + uri + '?' + jQuery.param(params);
         }
     }
 }

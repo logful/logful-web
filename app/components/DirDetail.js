@@ -21,6 +21,14 @@ export default class DirDetail extends Component {
             );
         }
         else {
+            let disks = [];
+            let volumes = [];
+            if (disk.DiskStatuses) {
+                disks = disk.DiskStatuses;
+            }
+            if (volume.Volumes) {
+                volumes = volume.Volumes;
+            }
             return (
                 <div>
                     <div className="col-xs-12">
@@ -46,7 +54,7 @@ export default class DirDetail extends Component {
                                     </thead>
                                     <tbody>
                                     {
-                                        disk.DiskStatuses.map(function (item, index) {
+                                        disks.map(function (item, index) {
                                             return (
                                                 <tr key={index}>
                                                     <td>{item.Dir}</td>
@@ -71,7 +79,7 @@ export default class DirDetail extends Component {
                                     </thead>
                                     <tbody>
                                     {
-                                        volume.Volumes.map(function (item, index) {
+                                        volumes.map(function (item, index) {
                                             return (
                                                 <tr key={index}>
                                                     <td>{item.Id}</td>

@@ -404,8 +404,8 @@
         {
           if (window.addEventListener)
           {
-            this.addEventListener('DOMMouseScroll', _onWheel, false);
-            this.addEventListener('mousewheel', _onWheel, false);
+            window.addEventListener('DOMMouseScroll', _onWheel, false);
+            window.addEventListener('mousewheel', _onWheel, false);
           }
           else
           {

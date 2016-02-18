@@ -9,11 +9,13 @@ import {
     UPDATE_WEEDFS_DISK_STATUS,
     UPDATE_SYSTEM_RESOURCE
 } from '../constants';
+import { defaultHeaders } from '../root';
 
 export function fetchWeedFSDirs(option) {
     return dispatch => {
-        fetch(URLHelper.formatUrl(API_URI.weed.dirStatus))
-            .then(parseResponse)
+        fetch(URLHelper.formatUrl(API_URI.weed.dirStatus), {
+            headers: defaultHeaders()
+        }).then(parseResponse)
             .then(res => dispatch({
                 type: UPDATE_WEEDFS_DIRS,
                 dirs: res
@@ -25,8 +27,9 @@ export function fetchWeedFSDirs(option) {
 export function fetchWeedFSVolumes(option) {
     let url = URLHelper.formatUrl(API_URI.weed.volumeStatus) + '/?node=' + option.address;
     return dispatch => {
-        fetch(url)
-            .then(parseResponse)
+        fetch(url, {
+            headers: defaultHeaders()
+        }).then(parseResponse)
             .then(res => dispatch({
                 type: UPDATE_WEEDFS_VOLUMES,
                 volumes: res
@@ -38,8 +41,9 @@ export function fetchWeedFSVolumes(option) {
 export function fetchWeedFSDiskStatus(option) {
     return dispatch => {
         let url = URLHelper.formatUrl(API_URI.weed.diskStatus) + '/?node=' + option.address;
-        fetch(url)
-            .then(parseResponse)
+        fetch(url, {
+            headers: defaultHeaders()
+        }).then(parseResponse)
             .then(res => dispatch({
                 type: UPDATE_WEEDFS_DISK_STATUS,
                 diskStatus: res

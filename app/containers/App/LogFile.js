@@ -8,6 +8,7 @@ import { Select } from 'react-select';
 import { formatNow, formatUnix } from '../../helpers/datetime';
 import { levelToString, levelSpanClass, fileSize, platformIcon } from '../../helpers/common';
 import { InputField } from '../../constants';
+import { downloadLogFile } from '../../helpers/fileDownloader';
 
 export default class LogFile extends Component {
 
@@ -78,8 +79,8 @@ export default class LogFile extends Component {
         this.props.dispatch(fetchFile(params));
     }
 
-    downloadFile(param) {
-        // TODO
+    downloadFile(params) {
+        downloadLogFile(params);
     }
 
     closeFileViewer() {

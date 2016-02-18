@@ -59,3 +59,12 @@
     margin-top: 2px;
     margin-bottom: 2px;
 }
+
+.logful-sidebar-toggle {
+    width: 100%;
+    display: block;
+    text-align: center;
+    padding: 8px 0;
+    color: white;
+    background-color: #29363b
+}

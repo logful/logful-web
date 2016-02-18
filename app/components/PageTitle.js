@@ -15,9 +15,10 @@ export default class PageTitle extends Component {
             fontSize: '18px',
             paddingLeft: '15px'
         };
+        const { data } = this.props;
         return (
             <div style={divStyle}>
-                <span>{this.props.titleText}</span>
+                <span>{data.title}</span>
             </div>
         );
     }

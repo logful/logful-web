@@ -1,14 +1,7 @@
-import React, { Component } from 'react';
-
-import 'ionicons/css/ionicons.min.css';
-import 'font-awesome/css/font-awesome.min.css';
-import '../../assets/bootstrap/css/bootstrap.css';
-import '../../assets/admin-lte/css/AdminLTE.css';
-import '../../assets/plugins/iCheck/square/blue.css';
-
-import '../../assets/plugins/jQuery/jQuery-2.1.4.min';
-import '../../assets/bootstrap/js/bootstrap';
-import '../../assets/plugins/iCheck/icheck';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { login } from '../../action/auth';
+import { LOGGED_IN } from '../../constants';
 
 export default class Login extends Component {
 
@@ -50,8 +43,12 @@ export default class Login extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        const self = this;
         if (this.state.username && this.state.password) {
-            console.log(this.state);
+            const body = this.state;
+            self.props.dispatch(login(body, function () {
+                self.props.history.pushState({}, '/');
+            }));
         }
     }
 
@@ -95,3 +92,9 @@ export default class Login extends Component {
         );
     }
 }
+
+Login.propTypes = {
+    dispatch: PropTypes.func.isRequired
+};
+
+export default connect()(Login)

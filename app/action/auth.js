@@ -8,8 +8,26 @@ import {
     LOG_OUT
 } from '../constants';
 
-export function login(data) {
-
+export function login(option, redirect) {
+    return dispatch => {
+        fetch(URLHelper.formatUrl(API_URI.authenticate), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(option)
+        }).then(parseResponse)
+            .then(function (data) {
+                dispatch({
+                    type: LOGGED_IN,
+                    token: data.token
+                });
+                if (redirect) {
+                    redirect();
+                }
+            }).catch(error => handleActionError(dispatch, error, LOGGED_IN))
+    };
 }
 
 export function logout() {

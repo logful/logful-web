@@ -7,6 +7,7 @@ import { fileSize, platformIcon } from '../../helpers/common';
 import { formatUnix } from '../../helpers/datetime';
 import { fetchCrashFiles, fetchCrashFile, clearCrashFiles, clearCrashFile } from '../../action/crashFile';
 import { InputField } from '../../constants';
+import { downloadCrashFile } from '../../helpers/fileDownloader';
 
 export default class CrashAnalyze extends Component {
 
@@ -22,6 +23,7 @@ export default class CrashAnalyze extends Component {
         this.performSearch = this.performSearch.bind(this);
         this.viewFileContent = this.viewFileContent.bind(this);
         this.closeFileViewer = this.closeFileViewer.bind(this);
+        this.downloadFile = this.downloadFile.bind(this);
     }
 
     componentDidMount() {
@@ -81,6 +83,10 @@ export default class CrashAnalyze extends Component {
         this.props.dispatch(clearCrashFile());
     }
 
+    downloadFile(params) {
+        downloadCrashFile(params);
+    }
+
     performSearch(event) {
         event.preventDefault();
         if (Object.keys(this.props.app).length != 0) {
@@ -93,6 +99,7 @@ export default class CrashAnalyze extends Component {
     render() {
         const { files, file } = this.props;
         const viewFile = this.viewFileContent;
+        const downloadFile = this.downloadFile;
         return (
             <div>
                 <FileViewer isOpen={this.state.isViewerOpen} file={file} onRequestClose={this.closeFileViewer}/>
@@ -260,6 +267,7 @@ export default class CrashAnalyze extends Component {
                                                                     <i className="fa fa-eye"/>&nbsp;查看
                                                                 </button>
                                                                 <button className="btn btn-success btn-xs"
+                                                                        onClick={downloadFile.bind(this, item)}
                                                                         style={{width: '50px'}}>
                                                                     <i className="fa fa-download"/>&nbsp;下载
                                                                 </button>

@@ -1,7 +1,8 @@
 import {
-    REFRESH_LAYOUT,
+    REFRESH_SIDEBAR,
     SIDEBAR_TYPE_MENU_ADMIN,
     SIDEBAR_TYPE_MENU_APP,
+    REFRESH_PAGE,
     ADMIN_MENU_DATA
 } from '../constants';
 
@@ -20,7 +21,7 @@ export function appMenuData(id) {
             }, {
                 name: '日志文件',
                 icon: 'fa-file',
-                route: '/app/' + id + '/file'
+                route: '/app/' + id + '/log'
             }, {
                 name: '崩溃分析',
                 icon: 'fa-bug',
@@ -30,7 +31,7 @@ export function appMenuData(id) {
                 icon: 'fa-cloud',
                 route: '/app/' + id + '/control'
             }, {
-                name: '返回首页',
+                name: '返回',
                 icon: 'fa-angle-double-left',
                 route: '/'
             }
@@ -43,7 +44,7 @@ export function adminSidebar(option) {
     sidebar.active = option.active;
     sidebar.data = ADMIN_MENU_DATA;
     return dispatch => {
-        dispatch({type: REFRESH_LAYOUT, sidebar: sidebar});
+        dispatch({type: REFRESH_SIDEBAR, sidebar: sidebar});
     };
 }
 
@@ -52,6 +53,17 @@ export function appSidebar(option) {
     sidebar.active = option.active;
     sidebar.data = appMenuData(option.id);
     return dispatch => {
-        dispatch({type: REFRESH_LAYOUT, sidebar: sidebar});
+        dispatch({type: REFRESH_SIDEBAR, sidebar: sidebar});
+    };
+}
+
+export function refreshPage(option) {
+    return dispatch => {
+        dispatch({
+            type: REFRESH_PAGE,
+            page: {
+                title: option.title
+            }
+        });
     };
 }

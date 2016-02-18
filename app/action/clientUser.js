@@ -6,12 +6,14 @@ import handleActionError from '../helpers/handleActionError';
 import {
     UPDATE_CLIENT_USER_LIST
 } from '../constants';
+import { defaultHeaders } from '../root';
 
 export function fetchUsers(option) {
     let url = URLHelper.formatUrl(API_URI.clientUser, option);
     return dispatch => {
-        fetch(url)
-            .then(parseResponse)
+        fetch(url, {
+            headers: defaultHeaders()
+        }).then(parseResponse)
             .then(res => dispatch({
                 type: UPDATE_CLIENT_USER_LIST,
                 users: res

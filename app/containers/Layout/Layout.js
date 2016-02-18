@@ -5,47 +5,18 @@ import PageTitle from '../../components/PageTitle';
 import { clearNotification } from '../../action/notification';
 var toastr = require('toastr');
 
-import '../../assets/bootstrap/css/bootstrap.min.css';
-import 'font-awesome/css/font-awesome.min.css';
-import 'ionicons/css/ionicons.min.css';
-import 'react-toggle/style.css';
-import 'toastr/build/toastr.min.css';
-import '../../assets/css/animate.css';
-import '../../assets/plugins/datatables/dataTables.bootstrap.css';
-import '../../assets/plugins/daterangepicker/daterangepicker.css'
-import '../../assets/admin-lte/css/skins/_all-skins.min.css';
-import '../../assets/plugins/iCheck/all.css';
-import '../../assets/plugins/timepicker/bootstrap-timepicker.min.css';
-import '../../assets/plugins/select2/select2.min.css';
-import '../../assets/plugins/ionslider/ion.rangeSlider.css';
-import '../../assets/plugins/ionslider/ion.rangeSlider.skinNice.css';
-import '../../assets/admin-lte/css/AdminLTE.min.css';
-import '../../assets/css/logful-style.css';
-
-import '../../assets/plugins/jQuery/jQuery-2.1.4.min';
-import '../../assets/bootstrap/js/bootstrap.min';
-
-import '../../assets/plugins/datatables/jquery.dataTables.min';
-import '../../assets/plugins/datatables/dataTables.bootstrap.min';
-import '../../assets/plugins/slimScroll/jquery.slimscroll.min';
-
-import '../../assets/plugins/select2/select2.min';
-import '../../assets/plugins/iCheck/icheck.min';
-import '../../assets/plugins/daterangepicker/moment.min';
-import '../../assets/plugins/daterangepicker/daterangepicker';
-
-import '../../assets/admin-lte/js/app.min';
-import '../../assets/plugins/ionslider/ion.rangeSlider.min';
-import 'bootstrap-tagsinput/dist/bootstrap-tagsinput.min';
-
 export default class Layout extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            expanded: true
+        };
+        this.toggleSidebar = this.toggleSidebar.bind(this);
     }
 
     componentWillMount() {
-        document.body.classList.add('hold-transition', 'skin-blue', 'sidebar-mini');
+        document.body.classList.add('skin-blue', 'sidebar-mini', 'fixed');
     }
 
     componentDidMount() {
@@ -65,7 +36,21 @@ export default class Layout extends Component {
         }
     }
 
+    toggleSidebar(event) {
+        let temp = !this.state.expanded;
+        this.setState({
+            expanded: temp
+        });
+    }
+
     render() {
+        const toggleContainerStyle = {
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%'
+        };
+        let toggleIcon = this.state.expanded ? 'fa fa-angle-left' : 'fa fa-angle-right';
         return (
             <div className="wrapper">
                 {/* Header */}
@@ -75,12 +60,7 @@ export default class Layout extends Component {
                         <span className="logo-lg"><b>Log</b>FUL</span>
                     </a>
                     <nav className="navbar navbar-static-top" role="navigation">
-                        {/*
-                         <a href="#" className="sidebar-toggle" data-toggle="offcanvas" role="button">
-                         <span className="sr-only">Toggle navigation</span>
-                         </a>
-                         */}
-                        <PageTitle titleText={'应用管理'}/>
+                        <PageTitle data={this.props.page}/>
                         <div className="navbar-custom-menu">
                         </div>
                     </nav>
@@ -91,6 +71,15 @@ export default class Layout extends Component {
                     <section className="sidebar">
                         <Sidebar data={this.props.sidebar}/>
                     </section>
+                    <div style={toggleContainerStyle}>
+                        <a href="#"
+                           className="logful-sidebar-toggle"
+                           onClick={this.toggleSidebar}
+                           data-toggle="offcanvas"
+                           role="button">
+                            <i className={toggleIcon}/>
+                        </a>
+                    </div>
                 </aside>
 
                 {/* Content */}
@@ -114,14 +103,15 @@ export default class Layout extends Component {
 
 Layout.propTypes = {
     sidebar: PropTypes.object.isRequired,
+    page: PropTypes.object.isRequired,
     message: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-    const { sidebar } = state.layout;
+    const { sidebar, page } = state.layout;
     const { message } = state.notification;
-    return {sidebar, message};
+    return {sidebar, page, message};
 }
 
 export default connect(mapStateToProps)(Layout)

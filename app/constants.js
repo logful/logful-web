@@ -1,9 +1,10 @@
 export const LOGGED_IN = 'LOGGED_IN';
 export const LOG_OUT = 'LOG_OUT';
 
-export const REFRESH_LAYOUT = 'REFRESH_LAYOUT';
+export const REFRESH_SIDEBAR = 'REFRESH_SIDEBAR';
 export const SIDEBAR_TYPE_MENU_ADMIN = 1;
 export const SIDEBAR_TYPE_MENU_APP = 2;
+export const REFRESH_PAGE = 'REFRESH_PAGE';
 
 export const UPDATE_WEEDFS_DIRS = 'UPDATE_WEEDFS_DIRS';
 export const UPDATE_WEEDFS_VOLUMES = 'UPDATE_WEEDFS_VOLUMES';
@@ -12,6 +13,7 @@ export const UPDATE_SYSTEM_RESOURCE = 'UPDATE_SYSTEM_RESOURCE';
 
 export const UPDATE_APP_LIST = 'UPDATE_APP_LIST';
 export const UPDATE_APP_ITEM = 'UPDATE_APP_ITEM';
+export const UPDATE_APP_STATISTIC = 'UPDATE_APP_STATISTIC';
 
 export const UPDATE_LOG_FILE_LIST = 'UPDATE_LOG_FILE_LIST';
 export const UPDATE_LOG_FILE_ITEM = 'UPDATE_LOG_FILE_ITEM';
@@ -51,14 +53,19 @@ export const InputField = {
     osVersion: 'osVersion',
     appId: 'appId',
     version: 'version',
-    versionString: 'versionString'
+    versionString: 'versionString',
+    packageName: 'packageName',
+    bundleId: 'bundleId',
+    getuiAppId: 'getuiAppId',
+    getuiAppKey: 'getuiAppKey',
+    getuiMasterSecret: 'getuiMasterSecret'
 };
 
-export const API_HOST = '127.0.0.1';
-export const API_PORT = '8800';
+export const API_BASE_URL = 'http://127.0.0.1:9600';
 export const API_URI = {
-    login: 'login',
+    authenticate: '/authenticate',
     app: '/api/app',
+    appStatistic: '/api/app/statistic',
     logFile: '/api/log/file',
     attachment: '/api/log/attachment',
     clientUser: '/api/user',

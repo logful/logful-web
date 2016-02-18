@@ -16,9 +16,8 @@ import {
 
 export default function routes(store) {
     const requireAuth = (nextState, replaceState) => {
-        // TODO
         const state = store.getState();
-        const isLoggedIn = Boolean(state.application.token);
+        const isLoggedIn = Boolean(state.auth.token);
         if (!isLoggedIn) {
             replaceState({
                 nextPathname: nextState.location.pathname
@@ -30,14 +29,14 @@ export default function routes(store) {
         <Route>
             <Route path="/login" component={Login}/>
             <Route component={Layout}>
-                <Route path="/" component={ListApp}/>
+                <Route path="/" component={ListApp} onEnter={requireAuth}/>
                 <Route path="/system" component={System}/>
                 <Route path="/app/create" component={CreateApp}/>
                 <Route path="/app/:id/info" component={AppInfo}/>
                 <Route path="/app/:id/user" component={ClientUser}/>
-                <Route path="/app/:id/file" component={LogFile}/>
-                <Route path="/app/:id/control" component={Control}/>
                 <Route path="/app/:id/crash" component={CrashAnalyze}/>
+                <Route path="/app/:id/log" component={LogFile}/>
+                <Route path="/app/:id/control" component={Control}/>
                 <Route path="*" component={NotFound}/>
             </Route>
         </Route>

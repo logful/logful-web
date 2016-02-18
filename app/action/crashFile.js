@@ -1,18 +1,20 @@
 import 'whatwg-fetch';
 import * as URLHelper from '../helpers/urls';
 import { API_URI } from '../constants';
-import parseResponse, { parseLogFileResponse } from '../helpers/parseResponse';
+import parseResponse, { parseStreamResponse } from '../helpers/parseResponse';
 import handleActionError from '../helpers/handleActionError';
 import {
     UPDATE_CRASH_FILE_LIST,
     UPDATE_CRASH_FILE_ITEM
 } from '../constants';
+import { defaultHeaders, streamHeaders } from '../root';
 
 export function fetchCrashFiles(option) {
     let url = URLHelper.formatUrl(API_URI.crashFile, option);
     return dispatch => {
-        fetch(url)
-            .then(parseResponse)
+        fetch(url, {
+            headers: defaultHeaders()
+        }).then(parseResponse)
             .then(res => dispatch({
                 type: UPDATE_CRASH_FILE_LIST,
                 files: res
@@ -25,8 +27,9 @@ export function fetchCrashFile(option) {
     if (option.id) {
         let url = URLHelper.formatUrl(API_URI.crashFile) + '/' + option.id;
         return dispatch => {
-            fetch(url)
-                .then(parseLogFileResponse)
+            fetch(url, {
+                headers: streamHeaders()
+            }).then(parseStreamResponse)
                 .then(res => dispatch({
                     type: UPDATE_CRASH_FILE_ITEM,
                     file: {

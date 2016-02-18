@@ -2,15 +2,16 @@ import React, { Component, PropTypes } from 'react';
 import { pushState } from 'redux-router';
 import { connect } from 'react-redux';
 import AppCard from '../../components/AppCard';
-import { fetchApps, storeAppData } from '../../action/application';
-import { adminSidebar } from '../../action/layout';
+import { fetchApps, storeAppData, deleteApp } from '../../action/application';
+import { adminSidebar, refreshPage } from '../../action/layout';
 
 export const ActionType = {
     remove: 'remove',
     edit: 'edit',
     info: 'info',
     user: 'user',
-    file: 'file',
+    log: 'log',
+    crash: 'crash',
     control: 'control'
 };
 
@@ -27,6 +28,9 @@ export default class ListApp extends Component {
             active: 0
         }));
         this.props.dispatch(fetchApps());
+        this.props.dispatch(refreshPage({
+            title: ''
+        }));
     }
 
     createApp(event) {
@@ -35,10 +39,29 @@ export default class ListApp extends Component {
     }
 
     handleAppCardEvent(action) {
+        const self = this;
         if (action && action.type && action.data) {
             this.props.dispatch(storeAppData(action.data));
-            if (action.type == ActionType.edit) {
+            if (action.type == ActionType.edit || action.type == ActionType.info) {
                 this.props.history.pushState({}, '/app/' + action.data.id + '/info');
+            }
+            if (action.type == ActionType.user) {
+                this.props.history.pushState({}, '/app/' + action.data.id + '/user');
+            }
+            if (action.type == ActionType.log) {
+                this.props.history.pushState({}, '/app/' + action.data.id + '/log');
+            }
+            if (action.type == ActionType.control) {
+                this.props.history.pushState({}, '/app/' + action.data.id + '/control');
+            }
+            if (action.type == ActionType.remove) {
+                deleteApp({
+                    id: action.data.id
+                }, function (success, error) {
+                    if (success) {
+                        self.props.dispatch(fetchApps());
+                    }
+                });
             }
         }
     }

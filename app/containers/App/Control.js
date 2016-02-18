@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import TagsInput from 'react-tagsinput';
 import { appSidebar } from '../../action/layout';
 import { pushData } from '../../action/control';
+import { fetchApp } from '../../action/application';
 import Toggle from 'react-toggle';
 import 'react-tagsinput/react-tagsinput';
 
@@ -13,20 +14,18 @@ export default class Control extends Component {
         this.state = {
             payload: {
                 on: true,
+                interrupt: false,
                 interval: 60,
                 frequency: 60,
-                params: {
-                    getui: {
-                        clientIds: [],
-                        alias: []
-                    }
-                }
+                clientIds: [],
+                aliases: []
             }
         };
         this.pushPayload = this.pushPayload.bind(this);
         this.tagsValueChange = this.tagsValueChange.bind(this);
         this.switchStateChange = this.switchStateChange.bind(this);
         this.initRangeSlider = this.initRangeSlider.bind(this);
+        this.initCheckbox = this.initCheckbox.bind(this);
     }
 
     componentDidMount() {
@@ -35,11 +34,18 @@ export default class Control extends Component {
             id: params.id,
             active: 4
         }));
+        if (Object.keys(this.props.app).length == 0) {
+            this.props.dispatch(fetchApp({
+                id: params.id
+            }));
+        }
         this.initRangeSlider();
+        this.initCheckbox();
     }
 
     componentDidUpdate() {
         this.initRangeSlider();
+        this.initCheckbox();
     }
 
     initRangeSlider() {
@@ -70,12 +76,28 @@ export default class Control extends Component {
         });
     }
 
-    tagsValueChange(type, field, tags) {
+    initCheckbox() {
+        const self = this;
+        let checkbox = jQuery('input[name="interrupt"]');
+        checkbox.iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%'
+        });
+        checkbox.on('ifChecked', function (event) {
+            self.state.payload.interrupt = true;
+        });
+        checkbox.on('ifUnchecked', function (event) {
+            self.state.payload.interrupt = false;
+        });
+    }
+
+    tagsValueChange(field, tags) {
         var unique = tags.filter(function (elem, index, self) {
             return index == self.indexOf(elem);
         });
         let newState = this.state;
-        newState.payload.params[type][field] = unique;
+        newState.payload[field] = unique;
         this.setState(newState);
     }
 
@@ -98,29 +120,28 @@ export default class Control extends Component {
 
     pushPayload(event) {
         event.preventDefault();
-        const payload = this.state.payload;
-        let data = {};
-        data.on = payload.on;
-        data.interval = payload.interval;
-        data.frequency = payload.frequency;
-        data.timestamp = Math.round(Date.now() / 1000);
-
-        data.params = {};
-        if (payload.params.getui.clientIds.length != 0 ||
-            payload.params.getui.alias.length != 0) {
-            data.params.getui = payload.params.getui;
-        }
-
-        console.log('push-data', data);
-        if (!data.params.getui) {
-
+        const { app } = this.props;
+        if (Object.keys(app).length == 0) {
+            // TODO
         }
         else {
-            pushData(data, function (success, error) {
-                if (error) {
-                    console.log(error);
-                }
-            });
+            if (app.getuiAppId && app.getuiAppKey && app.getuiMasterSecret) {
+                let payload = this.state.payload;
+                payload.timestamp = Math.round(Date.now() / 1000);
+                console.log('push', payload);
+                pushData({
+                    id: this.props.params.id,
+                    data: payload
+                }, function (success, error) {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            else {
+                console.log('getui sdk not config!');
+                // TODO
+            }
         }
     }
 
@@ -129,6 +150,10 @@ export default class Control extends Component {
         if (this.state.payload.on) {
             rangeView =
                 <div>
+                    <div className="form-group">
+                        <label>截断上传&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="interrupt"/>
+                    </div>
                     <div className="form-group">
                         <label>开启时间</label>
                         <input id="interval-range" type="text" value=""/>
@@ -159,14 +184,14 @@ export default class Control extends Component {
                                     <div className="col-md-6">
                                         <label>个推推送</label>
                                         <div className="form-group">
-                                            <TagsInput value={this.state.payload.params.getui.clientIds}
+                                            <TagsInput value={this.state.payload.clientIds}
                                                        renderInput={this.customRenderInput.bind(this, '输入 CID')}
-                                                       onChange={this.tagsValueChange.bind(this, 'getui', 'clientIds')}/>
+                                                       onChange={this.tagsValueChange.bind(this, 'clientIds')}/>
                                         </div>
                                         <div className="form-group">
-                                            <TagsInput value={this.state.payload.params.getui.alias}
+                                            <TagsInput value={this.state.payload.aliases}
                                                        renderInput={this.customRenderInput.bind(this, '输入别名')}
-                                                       onChange={this.tagsValueChange.bind(this, 'getui', 'alias')}/>
+                                                       onChange={this.tagsValueChange.bind(this, 'aliases')}/>
                                         </div>
                                     </div>
                                     <div className="col-md-6">
@@ -190,4 +215,14 @@ export default class Control extends Component {
     }
 }
 
-export default connect()(Control)
+Control.propTypes = {
+    app: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
+};
+
+function mapStateToProps(state) {
+    const { app } = state.application;
+    return {app};
+}
+
+export default connect(mapStateToProps)(Control)

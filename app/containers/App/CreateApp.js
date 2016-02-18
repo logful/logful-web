@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import React, { Component } from 'react';
-import * as URLHelper from '../../helpers/urls';
-import { API_URI, InputField } from '../../constants';
+import { createApp } from '../../action/application';
+import { InputField } from '../../constants';
 
 export default class CreateApp extends Component {
 
@@ -49,25 +49,10 @@ export default class CreateApp extends Component {
             });
         }
         else {
-            fetch(URLHelper.formatUrl(API_URI.app), {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(self.state.form)
-            }).then(function (response) {
-                if (response.status == 201) {
+            createApp(self.state.form, function (success, error) {
+                if (success) {
                     self.props.history.pushState({}, '/');
                 }
-                else {
-                    let error = new Error(response.statusText);
-                    error.response = response;
-                    throw error;
-                }
-            }).catch(function (error) {
-                // TODO
-                console.log('crate failed', error);
             });
         }
     }

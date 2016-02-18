@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { ActionType } from '../containers/App/ListApp';
 
+const ACTION_CLICK_REMOVE = 'ACTION_CLICK_REMOVE';
+
 export default class AppCard extends Component {
 
     constructor(props) {
@@ -8,11 +10,12 @@ export default class AppCard extends Component {
         this.state = {
             deleteMode: false
         };
+        this.confirmDelete = this.confirmDelete.bind(this);
     }
 
     clickAction(type, event) {
         event.preventDefault();
-        if (type == ActionType.remove) {
+        if (type == ACTION_CLICK_REMOVE) {
             this.setState({deleteMode: true});
         }
         else {
@@ -21,7 +24,7 @@ export default class AppCard extends Component {
                 this.props.handleAppCardEvent({
                     type: type,
                     data: data
-                }, event);
+                });
             }
         }
     }
@@ -33,7 +36,14 @@ export default class AppCard extends Component {
 
     confirmDelete(event) {
         event.preventDefault();
-        // TODO
+        const data = this.props.appData;
+        if (this.props.handleAppCardEvent) {
+            this.props.handleAppCardEvent({
+                type: ActionType.remove,
+                data: data
+            });
+        }
+        this.setState({deleteMode: false});
     }
 
     render() {
@@ -55,7 +65,7 @@ export default class AppCard extends Component {
                         <h3 className="box-title">{data.name}</h3>
                         <div className="box-tools pull-right">
                             <button className="btn btn-box-tool"
-                                    onClick={this.clickAction.bind(this, ActionType.remove)}>
+                                    onClick={this.clickAction.bind(this, ACTION_CLICK_REMOVE)}>
                                 <i className="fa fa-trash"/>
                             </button>
                             <button className="btn btn-box-tool"
@@ -65,7 +75,7 @@ export default class AppCard extends Component {
                         </div>
                     </div>
                     <div className="box-body">
-                        应用信息
+                        {data.description}
                     </div>
                     <div className="box-footer">
                         <div className="row">
@@ -83,8 +93,8 @@ export default class AppCard extends Component {
                             </div>
                             <div className="col-xs-3 text-center" style={dividerStyle}>
                                 <button className="btn btn-box-tool"
-                                        onClick={this.clickAction.bind(this, ActionType.file)}>
-                                    文件查看
+                                        onClick={this.clickAction.bind(this, ActionType.log)}>
+                                    日志查看
                                 </button>
                             </div>
                             <div className="col-xs-3 text-center" style={dividerStyle}>
