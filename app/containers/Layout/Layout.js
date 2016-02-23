@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import Sidebar from '../../components/Sidebar';
 import PageTitle from '../../components/PageTitle';
 import { clearNotification } from '../../action/notification';
+import { LOG_OUT } from '../../constants';
+import { logout } from '../../action/auth';
+
 var toastr = require('toastr');
 var logo = require('../../assets/logo.jpg');
 
@@ -14,6 +17,8 @@ export default class Layout extends Component {
             expanded: true
         };
         this.toggleSidebar = this.toggleSidebar.bind(this);
+        this.performSetting = this.performSetting.bind(this);
+        this.performLogout = this.performLogout.bind(this);
     }
 
     componentWillMount() {
@@ -27,6 +32,19 @@ export default class Layout extends Component {
 
     componentWillUnmount() {
         this.state.mounted = false;
+    }
+
+    performSetting(event) {
+        event.preventDefault();
+    }
+
+    performLogout(event) {
+        event.preventDefault();
+        const body = this.state;
+        const self = this;
+        self.props.dispatch(logout(body, function () {
+            self.props.history.pushState({}, '/login');
+        }));
     }
 
     componentWillReceiveProps(nextProps) {
@@ -83,10 +101,12 @@ export default class Layout extends Component {
                                         </li>
                                         <li className="user-footer">
                                             <div className="pull-left">
-                                                <a href="#" className="btn btn-default btn-flat">Setting</a>
+                                                <a href="#" className="btn btn-default btn-flat"
+                                                   onClick={this.performSetting}>Setting</a>
                                             </div>
                                             <div className="pull-right">
-                                                <a href="#" className="btn btn-default btn-flat">Sign out</a>
+                                                <a href="#" className="btn btn-default btn-flat"
+                                                   onClick={this.performLogout}>Sign out</a>
                                             </div>
                                         </li>
                                     </ul>

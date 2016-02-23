@@ -30,6 +30,15 @@ export function login(option, redirect) {
     };
 }
 
-export function logout() {
-
+export function logout(option, redirect) {
+    //todo
+    return dispatch => {
+        dispatch({
+            type: LOG_OUT,
+            token: ""
+        });
+        if (redirect) {
+            redirect();
+        }
+    };
 }
