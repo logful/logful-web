@@ -7,11 +7,12 @@ var request = require('request');
 var jwt = require('jsonwebtoken');
 var compress = require('compression');
 var cookieParser = require('cookie-parser');
-
+var cors = require('cors');
 var routes = require('./routes/index');
 var config = require('./config/config');
 
 var app = express();
+app.use(cors());
 app.use(cookieParser());
 app.use(compress());
 app.use(logger('dev'));
@@ -104,4 +105,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-//app.listen(8800);
+app.listen(6400);

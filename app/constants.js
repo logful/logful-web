@@ -61,7 +61,7 @@ export const InputField = {
     getuiMasterSecret: 'getuiMasterSecret'
 };
 
-export const API_BASE_URL = 'http://127.0.0.1:9600';
+export const API_BASE_URL = 'http://127.0.0.1:6400';
 export const API_URI = {
     authenticate: '/authenticate',
     app: '/api/app',

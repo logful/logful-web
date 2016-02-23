@@ -28,8 +28,8 @@ export default function routes(store) {
     return (
         <Route>
             <Route path="/login" component={Login}/>
-            <Route component={Layout}>
-                <Route path="/" component={ListApp} onEnter={requireAuth}/>
+            <Route component={Layout} onEnter={requireAuth}>
+                <Route path="/" component={ListApp}/>
                 <Route path="/system" component={System}/>
                 <Route path="/app/create" component={CreateApp}/>
                 <Route path="/app/:id/info" component={AppInfo}/>

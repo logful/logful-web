@@ -4,6 +4,7 @@ import Sidebar from '../../components/Sidebar';
 import PageTitle from '../../components/PageTitle';
 import { clearNotification } from '../../action/notification';
 var toastr = require('toastr');
+var logo = require('../../assets/logo.jpg');
 
 export default class Layout extends Component {
 
@@ -62,6 +63,35 @@ export default class Layout extends Component {
                     <nav className="navbar navbar-static-top" role="navigation">
                         <PageTitle data={this.props.page}/>
                         <div className="navbar-custom-menu">
+                            <ul className="nav navbar-nav">
+                                <li className="dropdown user user-menu">
+                                    <a href="#" className="dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <img src={logo} className="user-image"
+                                             alt="User Image">
+                                            <span className="hidden-xs">Admin</span></img>
+                                    </a>
+                                    <ul className="dropdown-menu">
+                                        <li className="user-header">
+                                            <img src={logo} className="img-circle"
+                                                 alt="User Image">
+                                                <p>
+                                                    Admin
+                                                    <small>logful</small>
+                                                </p>
+                                            </img>
+                                        </li>
+                                        <li className="user-footer">
+                                            <div className="pull-left">
+                                                <a href="#" className="btn btn-default btn-flat">Setting</a>
+                                            </div>
+                                            <div className="pull-right">
+                                                <a href="#" className="btn btn-default btn-flat">Sign out</a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </nav>
                 </header>
