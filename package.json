@@ -37,7 +37,7 @@
     "html-webpack-plugin": "^1.7.0",
     "immutable": "^3.7.6",
     "ionicons": "^2.0.1",
-    "jquery": "^2.1.4",
+    "jquery": "^3.5.0",
     "moment": "^2.11.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
